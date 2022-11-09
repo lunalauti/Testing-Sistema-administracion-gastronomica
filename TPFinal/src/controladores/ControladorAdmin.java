@@ -19,6 +19,7 @@ import presentacion.VAdmin;
 import presentacion.VLogin;
 import presentacion.VMesa;
 import presentacion.VMozo;
+import presentacion.VOperario;
 import presentacion.VProducto;
 import presentacion.VPromocion;
 import presentacion.VRegistroOp;
@@ -29,6 +30,14 @@ public class ControladorAdmin implements ActionListener {
 	private static ControladorAdmin instance = null;
 
 	private ControladorAdmin() {
+		if (Cerveceria.getInstance().getAdmin().editado == false) {
+			String pass = JOptionPane.showInputDialog(null, "Ingrese nueva contraseña para ADMIN");
+			while (pass == null || pass.isEmpty())
+				pass = JOptionPane.showInputDialog(null, "Contraseña invalida.Ingrese nueva contraseña para ADMIN");
+			Cerveceria.getInstance().getAdmin().setPassword(pass);
+			Cerveceria.getInstance().getAdmin().editado = true;
+			Sistema.getInstance().persistir();
+		}
 	}
 
 	public static ControladorAdmin getInstance() {
@@ -53,29 +62,74 @@ public class ControladorAdmin implements ActionListener {
 			String nya = this.vista.getNombre();
 			int cantHijos = this.vista.getCant();
 			Date fechaNac = this.vista.getFecha();
-			Sistema.getInstance().addMozo(nya, fechaNac, cantHijos);
+			Mozo mozo = this.vista.getSelectedMozo();
+			if (mozo != null) { // si existe es porque se quiere modificar
+				mozo.setCantHijos(cantHijos);
+				mozo.setNya(nya);
+				this.vista.cerrarse();
+				this.setVista(new VAdmin());
+				Sistema.getInstance().actualizarListaAdmin();
+				this.vista.notificar("Mozo modificado");
+				Sistema.getInstance().persistir();
+			} else
+				Sistema.getInstance().addMozo(nya, fechaNac, cantHijos);
 		} else if (comando.equalsIgnoreCase("REGISTRAR_OPERARIO")) {
 			String nya = this.vista.getNombre();
 			String user = this.vista.getUsername();
 			String pass = this.vista.getPassword();
-			Sistema.getInstance().addOperario(nya, user, pass);
+			boolean act = this.vista.getActivo();
+			Operario op = this.vista.getSelectedOperario();
+			if (op != null) {
+				op.setActivo(act);
+				op.setNya(nya);
+				op.setUsername(user);
+				op.setPassword(pass);
+				this.vista.cerrarse();
+				this.setVista(new VAdmin());
+				Sistema.getInstance().actualizarListaAdmin();
+				Sistema.getInstance().persistir();
+				this.vista.notificar("Operario modificado");
+			} else
+				Sistema.getInstance().addOperario(nya, user, pass);
 		} else if (comando.equalsIgnoreCase("REGISTRAR_PRODUCTO")) {
 			String nombre = this.vista.getNombre();
 			double pCosto = this.vista.getPCosto();
 			double pVenta = this.vista.getPVenta();
-			int stock = this.vista.getCant();
-			Sistema.getInstance().addProducto(nombre, pCosto, pVenta, stock);
+			double stock = this.vista.getCant();
+			Producto producto = this.vista.getSelectedProducto();
+			if (producto != null) {
+				producto.setNombre(nombre);
+				producto.setpCosto(pCosto);
+				producto.setpVenta(pVenta);
+				producto.setStock(stock);
+				this.vista.cerrarse();
+				this.setVista(new VAdmin());
+				Sistema.getInstance().actualizarListaAdmin();
+				Sistema.getInstance().persistir();
+				this.vista.notificar("Producto modificado");
+			} else
+				Sistema.getInstance().addProducto(nombre, pCosto, pVenta, stock);
 		} else if (comando.equalsIgnoreCase("REGISTRAR_MESA")) {
 			try {
 				int cantComensales = this.vista.getCant();
 				int nroMesa = this.vista.getNroComensales();
-				Sistema.getInstance().addMesa(cantComensales, nroMesa);
+				Mesa mesa = this.vista.getSelectedMesa();
+				if (mesa != null) {
+					mesa.setCantComensales(cantComensales);
+					this.vista.cerrarse();
+					this.setVista(new VAdmin());
+					Sistema.getInstance().actualizarListaAdmin();
+					Sistema.getInstance().persistir();
+					this.vista.notificar("Mesa modificada");
+				} else
+					Sistema.getInstance().addMesa(cantComensales, nroMesa);
 			} catch (Exception exc) {
 				JOptionPane.showMessageDialog(null, "Se debe ingresar un caracter numercio");
 			}
 		} else if (comando.equalsIgnoreCase("SALIR_ADMIN")) {
 			this.vista.cerrarse();
 			ControladorLogin.getInstance().setVista(new VLogin());
+			Sistema.getInstance().persistir();
 		} else if (comando.equalsIgnoreCase("OPERARIO")) {
 			this.vista.cerrarse();
 			this.setVista(new VRegistroOp());
@@ -87,8 +141,7 @@ public class ControladorAdmin implements ActionListener {
 			this.setVista(new VMesa());
 		} else if (comando.equalsIgnoreCase("PROMOCION")) {
 			this.vista.cerrarse();
-			ControladorPromo.getInstance().setVista(new VPromocion());
-			ControladorPromo.getInstance().getVista().cargaProductos(Cerveceria.getInstance().getProductos());
+			ControladorPromo.getInstance().setVista(new VPromocion(Cerveceria.getInstance().getProductos()));
 		} else if (comando.equalsIgnoreCase("MOZO")) {
 			this.vista.cerrarse();
 			this.setVista(new VMozo());
@@ -110,6 +163,37 @@ public class ControladorAdmin implements ActionListener {
 		} else if (comando.equalsIgnoreCase("ELIMINAR_PROMOP")) {
 			PromoProducto promo = this.vista.getSelectedPromoProd();
 			Sistema.getInstance().deletePromoProducto(promo);
+		} else if (comando.equalsIgnoreCase("MODIFICAR_MOZO")) {
+			Mozo mozo = this.vista.getSelectedMozo();
+			this.vista.cerrarse();
+			this.setVista(new VMozo());
+			this.vista.setMozo(mozo);
+			Sistema.getInstance().actualizarListaAdmin();
+		} else if (comando.equalsIgnoreCase("MODIFICAR_MESA")) {
+			Mesa mesa = this.vista.getSelectedMesa();
+			this.vista.cerrarse();
+			this.setVista(new VMesa());
+			this.vista.setMesa(mesa);
+		} else if (comando.equalsIgnoreCase("MODIFICAR_OP")) {
+			Operario op = this.vista.getSelectedOperario();
+			this.vista.cerrarse();
+			this.setVista(new VRegistroOp());
+			this.vista.setOperario(op);
+		} else if (comando.equalsIgnoreCase("MODIFICAR_PRODUCTO")) {
+			Producto producto = this.vista.getSelectedProducto();
+			this.vista.cerrarse();
+			this.setVista(new VProducto());
+			this.vista.setProducto(producto);
+		} else if (comando.equalsIgnoreCase("MODIFICAR_PROMOT")) {
+			PromoTemporal promo = this.vista.getSelectedPromoTemp();
+			this.vista.cerrarse();
+			ControladorPromo.getInstance().setVista(new VPromocion(Cerveceria.getInstance().getProductos()));
+			ControladorPromo.getInstance().getVista().setPromoTemp(promo);
+		} else if (comando.equalsIgnoreCase("MODIFICAR_PROMOP")) {
+			PromoProducto promo = this.vista.getSelectedPromoProd();
+			this.vista.cerrarse();
+			ControladorPromo.getInstance().setVista(new VPromocion(Cerveceria.getInstance().getProductos()));
+			ControladorPromo.getInstance().getVista().setPromoProd(promo);
 		} else if (comando.equalsIgnoreCase("SALIR")) {
 			ControladorAdmin.getInstance().getVista().cerrarse();
 			ControladorAdmin.getInstance().setVista(new VAdmin());

@@ -487,12 +487,12 @@ public class Cerveceria {
 		try {
 			IPersistencia<Serializable> persistencia = new PersistenciaBIN();
 			persistencia.abrirOutput("Cerveceria.bin");
-			System.out.println("Crea archivo escritura");
+			// System.out.println("Crea archivo escritura");
 			CerveceriaDTO cDTO = UtilPersistencia.CerveceriaToCerveceriaDTO(this);
 			persistencia.escribir(cDTO);
-			System.out.println("Cerveceria grabada exitosamente");
+			// System.out.println("Cerveceria grabada exitosamente");
 			persistencia.cerrarOutput();
-			System.out.println("Archivo cerrado");
+			// System.out.println("Archivo cerrado");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

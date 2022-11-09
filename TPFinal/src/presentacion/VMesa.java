@@ -26,6 +26,7 @@ import modelo.PromoTemporal;
 @SuppressWarnings("serial")
 public class VMesa extends JFrame implements IVistaAdmin {
 
+	private Mesa mesa = null;
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
 	private JPanel panel;
@@ -144,8 +145,7 @@ public class VMesa extends JFrame implements IVistaAdmin {
 
 	@Override
 	public Mesa getSelectedMesa() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.mesa;
 	}
 
 	@Override
@@ -218,6 +218,38 @@ public class VMesa extends JFrame implements IVistaAdmin {
 	public Date getFecha() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setMozo(Mozo mozo) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setMesa(Mesa mesa) {
+		this.mesa = mesa;
+		this.spinnerCant.setValue(mesa.getCantComensales());
+		this.spinnerNro.setValue(mesa.getNroMesa());
+		this.spinnerNro.setEnabled(false);
+	}
+
+	@Override
+	public void setOperario(Operario op) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setProducto(Producto producto) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean getActivo() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

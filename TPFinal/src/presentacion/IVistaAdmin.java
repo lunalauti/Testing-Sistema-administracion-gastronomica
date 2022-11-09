@@ -25,7 +25,7 @@ public interface IVistaAdmin {
 	Date getFecha();
 
 	int getCant();
-	
+
 	int getNroComensales();
 
 	double getPVenta();
@@ -44,6 +44,14 @@ public interface IVistaAdmin {
 
 	Producto getSelectedProducto();
 
+	void setMozo(Mozo mozo);
+
+	void setMesa(Mesa mesa);
+
+	void setOperario(Operario op);
+
+	void setProducto(Producto producto);
+
 	void actualizaListaProductos(ArrayList<Producto> productos);
 
 	void actualizaListaOperarios(ArrayList<Operario> operarios);
@@ -57,4 +65,7 @@ public interface IVistaAdmin {
 	void actualizaListaMozos(ArrayList<Mozo> mozos);
 
 	void notificar(String noti);
+
+	boolean getActivo();
+
 }

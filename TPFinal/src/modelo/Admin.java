@@ -4,6 +4,7 @@ import excepciones.UsuarioRepetidoException;
 
 public class Admin extends Operario {
 
+	public boolean editado=false;
 	/**
 	 * Crea una nueva instancia de la clase Admin. <br>
 	 * <b>Post:</b> El Admin se crear� con un nombre de usuario (ADMIN) y una

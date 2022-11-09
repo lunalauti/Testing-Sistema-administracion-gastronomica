@@ -26,10 +26,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import modelo.Producto;
+import modelo.PromoProducto;
+import modelo.PromoTemporal;
+import modelo.Promocion;
 
 @SuppressWarnings("serial")
 public class VPromocion extends JFrame implements IVistaPromo, KeyListener, MouseListener {
 
+	private Promocion promo = null;
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
 	private JPanel panel;
@@ -53,7 +57,6 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 	private JPanel panel_7;
 	private JPanel panel_8;
 	private JButton btnEnviar;
-	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_4;
 	private JTextField textNombre;
 	private JLabel lblNewLabel_5;
@@ -75,9 +78,10 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 	private JLabel lblNewLabel_10;
 	private JLabel lblNewLabel_11;
 	private JButton btnSalir;
+	private JCheckBox checkBoxActiva;
 
 	@SuppressWarnings("unchecked")
-	public VPromocion() {
+	public VPromocion(ArrayList<Producto> productos) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 752, 477);
 		this.contentPane = new JPanel();
@@ -254,8 +258,10 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 		this.panel_3.add(this.panel_8, BorderLayout.SOUTH);
 		this.panel_8.setLayout(new GridLayout(0, 3, 0, 0));
 
-		this.lblNewLabel_3 = new JLabel("");
-		this.panel_8.add(this.lblNewLabel_3);
+		this.checkBoxActiva = new JCheckBox("ACTIVA");
+		this.checkBoxActiva.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		this.checkBoxActiva.setHorizontalAlignment(SwingConstants.CENTER);
+		this.panel_8.add(this.checkBoxActiva);
 
 		this.btnEnviar = new JButton("ENVIAR");
 		this.btnEnviar.setEnabled(false);
@@ -294,7 +300,7 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 		this.panel_7.add(this.textPrecio);
 		this.textPrecio.setColumns(10);
 		this.setVisible(true);
-
+		this.cargaProductos(productos);
 	}
 
 	private boolean verifica() {
@@ -345,7 +351,7 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 	public void mousePressed(MouseEvent e) {
 	}
 
-	public void mouseReleased(MouseEvent e) {
+	private void activar() {
 		if (this.rdbtnTemporal.isSelected()) {
 			this.textNombre.setEnabled(true);
 			this.textPorcentaje.setEnabled(true);
@@ -373,6 +379,10 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 			this.spinnerCantMinima.setEnabled(false);
 		}
 		this.btnEnviar.setEnabled(verifica());
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		activar();
 	}
 
 	@Override
@@ -454,11 +464,76 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 		return dias;
 	}
 
-	@Override
 	public void cargaProductos(ArrayList<Producto> productos) {
 		this.modeloListaProducto.removeAllElements();
 		for (Producto p : productos)
 			this.modeloListaProducto.addElement(p);
 		this.validate();
+	}
+
+	@Override
+	public void setPromoTemp(PromoTemporal promo) {
+		this.promo = promo;
+		if (promo.getDiasDePromo().contains("DOMINGO"))
+			this.checkBoxDomingo.setSelected(true);
+		if (promo.getDiasDePromo().contains("LUNES"))
+			this.checkBoxLunes.setSelected(true);
+		if (promo.getDiasDePromo().contains("MARTES"))
+			this.checkBoxMartes.setSelected(true);
+		if (promo.getDiasDePromo().contains("MIERCOLES"))
+			this.checkBoxMiercoles.setSelected(true);
+		if (promo.getDiasDePromo().contains("JUEVES"))
+			this.checkBoxJueves.setSelected(true);
+		if (promo.getDiasDePromo().contains("VIERNES"))
+			this.checkBoxViernes.setSelected(true);
+		if (promo.getDiasDePromo().contains("SABADO"))
+			this.checkBoxSabado.setSelected(true);
+
+		this.rdbtnTemporal.setSelected(true);
+		this.textNombre.setText(promo.getNombre());
+		this.textPorcentaje.setText(String.valueOf(promo.getPorcentajeDesc()));
+		this.checkBoxAcumulable.setSelected(promo.isEsAcumulable());
+		this.comboBoxPago.setSelectedItem(promo.getFormaPago());
+		this.checkBoxActiva.setSelected(promo.isActiva());
+		activar();
+	}
+
+	@Override
+	public void setPromoProd(PromoProducto promo) {
+		this.promo = promo;
+		this.comboBoxProductos.setEnabled(false);
+		if (promo.getDiasDePromo().contains("DOMINGO"))
+			this.checkBoxDomingo.setSelected(true);
+		if (promo.getDiasDePromo().contains("LUNES"))
+			this.checkBoxLunes.setSelected(true);
+		if (promo.getDiasDePromo().contains("MARTES"))
+			this.checkBoxMartes.setSelected(true);
+		if (promo.getDiasDePromo().contains("MIERCOLES"))
+			this.checkBoxMiercoles.setSelected(true);
+		if (promo.getDiasDePromo().contains("JUEVES"))
+			this.checkBoxJueves.setSelected(true);
+		if (promo.getDiasDePromo().contains("VIERNES"))
+			this.checkBoxViernes.setSelected(true);
+		if (promo.getDiasDePromo().contains("SABADO"))
+			this.checkBoxSabado.setSelected(true);
+
+		this.rdbtnProducto.setSelected(true);
+		this.comboBoxProductos.setSelectedItem(promo.getProducto());
+		this.textPrecio.setText(String.valueOf(promo.getDtoPorCantidad_PrecioUnit()));
+		this.spinnerCantMinima.setValue(promo.getDtoPorCantidad_CantMinima());
+		this.checkBoxActiva.setSelected(promo.isActiva());
+		this.rdbtn2x1.setSelected(promo.aplicaDosPorUno);
+		this.rdbtnCantidad.setSelected(!promo.aplicaDosPorUno);
+		activar();
+	}
+
+	@Override
+	public Promocion getPromocion() {
+		return this.promo;
+	}
+
+	@Override
+	public boolean getActivo() {
+		return this.checkBoxActiva.isSelected();
 	}
 }

@@ -35,6 +35,7 @@ import java.awt.event.KeyEvent;
 @SuppressWarnings("serial")
 public class VProducto extends JFrame implements IVistaAdmin, KeyListener {
 
+	private Producto producto = null;
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
 	private JPanel panel;
@@ -222,8 +223,7 @@ public class VProducto extends JFrame implements IVistaAdmin, KeyListener {
 
 	@Override
 	public Producto getSelectedProducto() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.producto;
 	}
 
 	@Override
@@ -272,6 +272,40 @@ public class VProducto extends JFrame implements IVistaAdmin, KeyListener {
 	public int getNroComensales() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void setMozo(Mozo mozo) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setMesa(Mesa mesa) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setOperario(Operario op) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setProducto(Producto producto) {
+		this.producto = producto;
+		this.textNombre.setText(producto.getNombre());
+		this.textCosto.setText(String.valueOf(producto.getpCosto()));
+		this.textVenta.setText(String.valueOf(producto.getpVenta()));
+		this.spinnerStock.setValue(producto.getStock());
+		this.btnEnviar.setEnabled(validar());
+	}
+
+	@Override
+	public boolean getActivo() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

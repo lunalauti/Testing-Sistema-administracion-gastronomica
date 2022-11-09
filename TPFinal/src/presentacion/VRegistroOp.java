@@ -1,7 +1,6 @@
 package presentacion;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -25,10 +24,12 @@ import modelo.Operario;
 import modelo.Producto;
 import modelo.PromoProducto;
 import modelo.PromoTemporal;
+import javax.swing.JCheckBox;
 
 @SuppressWarnings("serial")
 public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 
+	private Operario op = null;
 	private JPanel contentPane;
 	private JPanel panel;
 	private JLabel lblNewLabel;
@@ -43,6 +44,7 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 	private JPasswordField TextPass2;
 	private ActionListener actionListener;
 	private JButton btnNewButton;
+	private JCheckBox checkBoxActivo;
 
 	public VRegistroOp() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,7 +57,7 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 
 		this.panel = new JPanel();
 		this.contentPane.add(this.panel);
-		this.panel.setLayout(new GridLayout(10, 1, 0, 0));
+		this.panel.setLayout(new GridLayout(11, 1, 0, 0));
 
 		this.lblNewLabel = new JLabel("NUEVO OPERARIO");
 		this.lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -99,6 +101,10 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 		this.TextPass2.addKeyListener(this);
 		this.TextPass2.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		this.panel.add(this.TextPass2);
+
+		this.checkBoxActivo = new JCheckBox("ACTIVO");
+		this.checkBoxActivo.setHorizontalAlignment(SwingConstants.CENTER);
+		this.panel.add(this.checkBoxActivo);
 
 		this.btnRegistrar = new JButton("REGISTRAR");
 		this.btnRegistrar.setActionCommand("REGISTRAR_OPERARIO");
@@ -185,8 +191,7 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 
 	@Override
 	public Operario getSelectedOperario() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.op;
 	}
 
 	@Override
@@ -265,5 +270,39 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 	public int getNroComensales() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void setMozo(Mozo mozo) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setMesa(Mesa mesa) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setOperario(Operario op) {
+		this.op = op;
+		this.textNyA.setText(op.getNya());
+		this.textPass.setText(op.getPassword());
+		this.TextPass2.setText(op.getPassword());
+		this.textUser.setText(op.getUsername());
+		this.checkBoxActivo.setSelected(op.isActivo());
+		this.btnRegistrar.setEnabled(verifica());
+	}
+
+	@Override
+	public void setProducto(Producto producto) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean getActivo() {
+		return this.checkBoxActivo.isSelected();
 	}
 }

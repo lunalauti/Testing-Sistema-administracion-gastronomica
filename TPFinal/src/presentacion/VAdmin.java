@@ -143,7 +143,7 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 		this.btnMozo = new JButton("AGREGAR MOZO");
 		this.btnMozo.setActionCommand("MOZO");
 		this.panel_3.add(this.btnMozo);
-		
+
 		this.panel_19 = new JPanel();
 		this.panel_3.add(this.panel_19);
 		this.panel_19.setLayout(new BorderLayout(0, 0));
@@ -159,14 +159,14 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 		this.btnSalir = new JButton("SALIR");
 		this.btnSalir.setActionCommand("SALIR_ADMIN");
 		this.panel_3.add(this.btnSalir);
-		
+
 		this.panel_18 = new JPanel();
 		this.panel.add(this.panel_18);
 		this.panel_18.setLayout(new BorderLayout(0, 0));
-		
+
 		this.scrollPane_6 = new JScrollPane();
 		this.panel_18.add(this.scrollPane_6);
-		
+
 		this.listNotificacion = new JList<String>();
 		this.listNotificacion.setModel(modeloListaNoti);
 		this.scrollPane_6.setViewportView(this.listNotificacion);
@@ -405,6 +405,8 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 		this.btnModificarMozo.addActionListener(actionListener);
 		this.btnModificarOp.addActionListener(actionListener);
 		this.btnModificarPromoT.addActionListener(actionListener);
+		this.btnModificarPromoP.addActionListener(actionListener);
+		this.btnModificarProducto.addActionListener(actionListener);
 		this.btnMozo.addActionListener(actionListener);
 		this.btnOperario.addActionListener(actionListener);
 		this.btnProducto.addActionListener(actionListener);
@@ -529,7 +531,6 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 		this.validate();
 	}
 
-
 	@Override
 	public void actualizaListaOperarios(ArrayList<Operario> operarios) {
 		this.modeloListaOperario.removeAllElements();
@@ -581,5 +582,35 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 	public int getNroComensales() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void setMozo(Mozo mozo) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setMesa(Mesa mesa) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setOperario(Operario op) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setProducto(Producto producto) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean getActivo() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

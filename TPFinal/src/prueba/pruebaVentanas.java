@@ -16,17 +16,17 @@ public class pruebaVentanas {
 		Cerveceria cerveceria = Cerveceria.getInstance();
 		try {
 			persistencia.abrirInput("Cerveceria.bin");
-			System.out.println("Archivo abierto");
+			// System.out.println("Archivo abierto");
 			CerveceriaDTO cdto = (CerveceriaDTO) persistencia.leer();
 			UtilPersistencia.CerveceriaDTOToCerveceria(cdto, cerveceria);
-			System.out.println("Cerveceria recuperada");
+			// System.out.println("Cerveceria recuperada");
 			persistencia.cerrarInput();
-			System.out.println("Archivo cerrado");
+			// System.out.println("Archivo cerrado");
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
-		}finally {
+		} finally {
 			ControladorLogin.getInstance();
 		}
 	}

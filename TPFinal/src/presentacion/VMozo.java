@@ -35,6 +35,7 @@ import modelo.PromoTemporal;
 @SuppressWarnings("serial")
 public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 
+	private Mozo mozo = null;
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
 	private JPanel panel;
@@ -117,7 +118,7 @@ public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 	}
 
 	public boolean verifica() {
-		return this.textNyA.getText().length() > 0 && this.textNyA.getText()!=""
+		return this.textNyA.getText().length() > 0 && this.textNyA.getText() != ""
 				&& this.textFecha.getText().charAt(9) != ' ';
 	}
 
@@ -163,6 +164,17 @@ public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 		return fecha;
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
+	public void setMozo(Mozo mozo) {
+		this.mozo = mozo;
+		this.textNyA.setText(mozo.getNya());
+		this.textFecha.setText("00/00/0000");
+		this.textFecha.setEnabled(false);
+		this.spinnerCant.setValue(mozo.getCantHijos());
+		this.btnEnviar.setEnabled(verifica());
+	}
+
 	@Override
 	public int getCant() {
 		return (Integer) this.spinnerCant.getValue();
@@ -200,8 +212,7 @@ public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 
 	@Override
 	public Mozo getSelectedMozo() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.mozo;
 	}
 
 	@Override
@@ -274,6 +285,30 @@ public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 	public int getNroComensales() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void setMesa(Mesa mesa) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setOperario(Operario op) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setProducto(Producto producto) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean getActivo() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

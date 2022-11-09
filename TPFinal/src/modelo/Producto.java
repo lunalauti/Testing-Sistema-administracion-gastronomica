@@ -107,4 +107,8 @@ public class Producto implements Serializable {
 				+ ", Stock=" + stock;
 	}
 
+	public void setStock(double stock) {
+		this.stock = stock;
+	}
+
 }
