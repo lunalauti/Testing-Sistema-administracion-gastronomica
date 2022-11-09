@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -8,8 +9,10 @@ import java.util.ArrayList;
  * <b>Invariante: </b><br>
  * -diasDePromo distintos de null y no puede estar vacio<br>
  */
-public class Promocion {
+public class Promocion implements Serializable {
 
+	public static int incremental = 0;
+	public int idPromo;
 	public ArrayList<String> diasDePromo = new ArrayList<String>(); // Lunes a Domingo
 	private boolean activa;
 
@@ -23,6 +26,7 @@ public class Promocion {
 	 * @param activa:     Determina si la promo esta activa o no
 	 */
 	public Promocion(ArrayList<String> diasDePromo) {
+		this.idPromo = incremental++;
 		this.diasDePromo = diasDePromo;
 		this.activa = true;
 	}
@@ -43,9 +47,16 @@ public class Promocion {
 		this.activa = activa;
 	}
 
+	public String getDias() {
+		String dias = "";
+		for (String dia : this.diasDePromo)
+			dias += dia;
+		return dias;
+	}
+
 	@Override
 	public String toString() {
-		return "diasDePromo=" + diasDePromo;
+		return "idPromo= #" + idPromo + ", diasDePromo=" + getDias();
 	}
 
 }

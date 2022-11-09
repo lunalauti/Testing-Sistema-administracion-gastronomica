@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
 
@@ -8,7 +9,7 @@ import java.util.Date;
  * <b>Invariante: </b><br>
  * - producto !=null. fecha != null. cantidad > 0
  */
-public class Pedido {
+public class Pedido implements Serializable{
 	public Producto producto;
 	public double cantidad;
 	public Date fecha; // no se si va esta

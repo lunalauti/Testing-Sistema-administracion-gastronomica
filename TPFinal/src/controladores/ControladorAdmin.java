@@ -17,6 +17,7 @@ import negocio.Sistema;
 import presentacion.IVistaAdmin;
 import presentacion.VAdmin;
 import presentacion.VLogin;
+import presentacion.VMesa;
 import presentacion.VMozo;
 import presentacion.VProducto;
 import presentacion.VPromocion;
@@ -64,11 +65,11 @@ public class ControladorAdmin implements ActionListener {
 			double pVenta = this.vista.getPVenta();
 			int stock = this.vista.getCant();
 			Sistema.getInstance().addProducto(nombre, pCosto, pVenta, stock);
-		} else if (comando.equalsIgnoreCase("MESA")) {
-			String respuesta = JOptionPane.showInputDialog("Ingresa la cantidad maxima de comensales");
+		} else if (comando.equalsIgnoreCase("REGISTRAR_MESA")) {
 			try {
-				int cantComensales = Integer.valueOf(respuesta);
-				Sistema.getInstance().addMesa(cantComensales);
+				int cantComensales = this.vista.getCant();
+				int nroMesa = this.vista.getNroComensales();
+				Sistema.getInstance().addMesa(cantComensales, nroMesa);
 			} catch (Exception exc) {
 				JOptionPane.showMessageDialog(null, "Se debe ingresar un caracter numercio");
 			}
@@ -81,6 +82,9 @@ public class ControladorAdmin implements ActionListener {
 		} else if (comando.equalsIgnoreCase("PRODUCTO")) {
 			this.vista.cerrarse();
 			this.setVista(new VProducto());
+		} else if (comando.equalsIgnoreCase("MESA")) {
+			this.vista.cerrarse();
+			this.setVista(new VMesa());
 		} else if (comando.equalsIgnoreCase("PROMOCION")) {
 			this.vista.cerrarse();
 			ControladorPromo.getInstance().setVista(new VPromocion());
@@ -109,6 +113,7 @@ public class ControladorAdmin implements ActionListener {
 		} else if (comando.equalsIgnoreCase("SALIR")) {
 			ControladorAdmin.getInstance().getVista().cerrarse();
 			ControladorAdmin.getInstance().setVista(new VAdmin());
+			Sistema.getInstance().actualizarListaAdmin();
 		}
 	}
 

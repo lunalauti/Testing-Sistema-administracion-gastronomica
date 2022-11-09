@@ -1,10 +1,11 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Comanda {
+public class Comanda implements Serializable{
 	public Date fecha;
 	public Mesa mesa;
 	public ArrayList<Pedido> listaProductos = new ArrayList<Pedido>();

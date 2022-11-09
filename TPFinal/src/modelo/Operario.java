@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import excepciones.CantInsuficienteProdException;
@@ -15,7 +16,8 @@ import excepciones.ProductosInvalidosException;
  * - nya != null y distinto de vacio. - username != null y distinto de vacio. -
  * password !=null y distinto de vacio.
  */
-public class Operario {
+@SuppressWarnings("serial")
+public class Operario implements Serializable{
 	private String nya;
 	private String username;
 	private String password;

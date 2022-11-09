@@ -1,5 +1,7 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * * Clase Producto del modelo <br>
  * <b>Invariante: </b><br>
@@ -7,7 +9,7 @@ package modelo;
  * -nombre debe ser distinto de null y vacio <br>
  * -stock debe ser mayor o igual a 0
  */
-public class Producto {
+public class Producto implements Serializable {
 	private static int incremental = 0;
 	public int id_producto;
 	public String nombre;

@@ -25,6 +25,8 @@ public interface IVistaAdmin {
 	Date getFecha();
 
 	int getCant();
+	
+	int getNroComensales();
 
 	double getPVenta();
 

@@ -19,7 +19,6 @@ public class UtilPersistencia {
         respuesta.setVentas(cerveceria.getVentas());
         respuesta.setPromoTemporales(cerveceria.getPromoTemporales());
         respuesta.setPromosProducto(cerveceria.getPromosProducto());
-
         return respuesta;
     }
 

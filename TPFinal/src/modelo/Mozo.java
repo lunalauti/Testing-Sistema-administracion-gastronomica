@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -11,7 +12,7 @@ import java.util.Date;
  * totalVentas >= 0.
  */
 
-public class Mozo {
+public class Mozo implements Serializable {
 	public String nya;
 	public Date fecha_nac;
 	public int cantHijos;
@@ -152,8 +153,10 @@ public class Mozo {
 		this.invariante();
 	}
 
+	@SuppressWarnings("deprecation")
 	public int getEdad() {
-		return 1;
+		Date date = new Date();
+		return date.getYear() + 1900 - this.fecha_nac.getYear();
 	}
 
 	public void invariante() {

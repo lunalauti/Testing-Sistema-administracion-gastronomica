@@ -28,6 +28,8 @@ import modelo.PromoProducto;
 import modelo.PromoTemporal;
 import modelo.Promocion;
 import javax.swing.ListSelectionModel;
+import javax.swing.JTextField;
+import javax.swing.JSpinner;
 
 @SuppressWarnings("serial")
 public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
@@ -99,6 +101,7 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 	private JScrollPane scrollPane_6;
 	private JList<String> listNotificacion;
 	private DefaultListModel<String> modeloListaNoti = new DefaultListModel<String>();
+	private JPanel panel_19;
 
 	public VAdmin() {
 
@@ -140,10 +143,14 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 		this.btnMozo = new JButton("AGREGAR MOZO");
 		this.btnMozo.setActionCommand("MOZO");
 		this.panel_3.add(this.btnMozo);
+		
+		this.panel_19 = new JPanel();
+		this.panel_3.add(this.panel_19);
+		this.panel_19.setLayout(new BorderLayout(0, 0));
 
 		this.btnMesa = new JButton("AGREGAR MESA");
+		this.panel_19.add(this.btnMesa);
 		this.btnMesa.setActionCommand("MESA");
-		this.panel_3.add(this.btnMesa);
 
 		this.btnPromocion = new JButton("AGREGAR PROMOCION");
 		this.btnPromocion.setActionCommand("PROMOCION");
@@ -568,5 +575,11 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 	public void notificar(String noti) {
 		this.modeloListaNoti.addElement(noti);
 		this.validate();
+	}
+
+	@Override
+	public int getNroComensales() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,6 +10,10 @@ import excepciones.MozoInexistenteException;
 import excepciones.MozoNoDisponibleException;
 import excepciones.ProductosInvalidosException;
 import excepciones.UsuarioRepetidoException;
+import persistencia.CerveceriaDTO;
+import persistencia.IPersistencia;
+import persistencia.PersistenciaBIN;
+import persistencia.UtilPersistencia;
 
 public class Cerveceria {
 	private static Cerveceria instance = null;
@@ -212,7 +217,7 @@ public class Cerveceria {
 	private double getPrecioConDescuento(Pedido pedido, PromoProducto promoProducto) {
 		double precio = pedido.getProducto().getpVenta() * pedido.getCantidad();
 		if (promoProducto.isAplicaDosPorUno())
-			precio -= pedido.getProducto().getpVenta() * Math.floorDiv((int)pedido.getCantidad(), 2);
+			precio -= pedido.getProducto().getpVenta() * Math.floorDiv((int) pedido.getCantidad(), 2);
 		else if (pedido.getCantidad() >= promoProducto.getDtoPorCantidad_CantMinima()) // si no cumple con la cant min,
 																						// no aplico desc
 			precio = promoProducto.getDtoPorCantidad_PrecioUnit() * pedido.getCantidad();
@@ -476,5 +481,20 @@ public class Cerveceria {
 
 	public void setPromosProducto(ArrayList<PromoProducto> promosProducto) {
 		this.promosProducto = promosProducto;
+	}
+
+	public void persistir() {
+		try {
+			IPersistencia<Serializable> persistencia = new PersistenciaBIN();
+			persistencia.abrirOutput("Cerveceria.bin");
+			System.out.println("Crea archivo escritura");
+			CerveceriaDTO cDTO = UtilPersistencia.CerveceriaToCerveceriaDTO(this);
+			persistencia.escribir(cDTO);
+			System.out.println("Cerveceria grabada exitosamente");
+			persistencia.cerrarOutput();
+			System.out.println("Archivo cerrado");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }

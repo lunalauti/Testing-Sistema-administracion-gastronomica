@@ -1,29 +1,20 @@
 package presentacion;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.MaskFormatter;
 
 import modelo.Mesa;
 import modelo.Mozo;
@@ -33,70 +24,57 @@ import modelo.PromoProducto;
 import modelo.PromoTemporal;
 
 @SuppressWarnings("serial")
-public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
+public class VMesa extends JFrame implements IVistaAdmin {
 
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
 	private JPanel panel;
 	private JLabel lblNewLabel_1;
-	private JTextField textNyA;
-	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
 	private JSpinner spinnerCant;
 	private JButton btnEnviar;
-	private JFormattedTextField textFecha;
 	private ActionListener actionListener;
 	private JButton btnSalir;
+	private JSpinner spinnerNro;
 
-	public VMozo() {
+	public VMesa() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 383, 467);
+		setBounds(100, 100, 383, 322);
 		this.contentPane = new JPanel();
 		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(this.contentPane);
 		this.contentPane.setLayout(new BorderLayout(0, 0));
 
-		this.lblNewLabel = new JLabel("NUEVO MOZO");
+		this.lblNewLabel = new JLabel("NUEVO MESA");
 		this.lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		this.lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		this.contentPane.add(this.lblNewLabel, BorderLayout.NORTH);
 
 		this.panel = new JPanel();
 		this.contentPane.add(this.panel, BorderLayout.CENTER);
-		this.panel.setLayout(new GridLayout(8, 0, 0, 0));
+		this.panel.setLayout(new GridLayout(6, 0, 0, 0));
 
-		this.lblNewLabel_1 = new JLabel("Nombre y Apellido");
+		this.lblNewLabel_1 = new JLabel("Numero de mesa");
 		this.lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		this.panel.add(this.lblNewLabel_1);
 
-		this.textNyA = new JTextField();
-		this.textNyA.addKeyListener(this);
-		this.panel.add(this.textNyA);
-		this.textNyA.setColumns(10);
+		this.spinnerNro = new JSpinner();
+		this.spinnerNro
+				.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		this.panel.add(this.spinnerNro);
 
-		this.lblNewLabel_2 = new JLabel("Fecha de nacimiento");
-		this.lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		this.panel.add(this.lblNewLabel_2);
-
-		this.textFecha = new JFormattedTextField(crearFormato("##/##/####"));
-		this.textFecha.addKeyListener(this);
-		this.panel.add(this.textFecha);
-
-		this.lblNewLabel_3 = new JLabel("Cantidad de hijos");
+		this.lblNewLabel_3 = new JLabel("Cantidad de comensales");
 		this.lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		this.panel.add(this.lblNewLabel_3);
 
 		this.spinnerCant = new JSpinner();
-
-		this.spinnerCant.addKeyListener(this);
 		this.spinnerCant
-				.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+				.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 		this.panel.add(this.spinnerCant);
 
 		this.btnEnviar = new JButton("REGISTRAR");
-		this.btnEnviar.setActionCommand("REGISTRAR_MOZO");
-		this.btnEnviar.setEnabled(false);
+		this.btnEnviar.setActionCommand("REGISTRAR_MESA");
 		this.btnEnviar.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		this.panel.add(this.btnEnviar);
 
@@ -104,31 +82,6 @@ public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 		this.btnSalir.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		this.panel.add(this.btnSalir);
 		this.setVisible(true);
-	}
-
-	private MaskFormatter crearFormato(String s) {
-		MaskFormatter formatter = null;
-		try {
-			formatter = new MaskFormatter(s);
-		} catch (java.text.ParseException exc) {
-			System.err.println("Formato invalido: " + exc.getMessage());
-		}
-		return formatter;
-	}
-
-	public boolean verifica() {
-		return this.textNyA.getText().length() > 0 && this.textNyA.getText()!=""
-				&& this.textFecha.getText().charAt(9) != ' ';
-	}
-
-	public void keyPressed(KeyEvent e) {
-	}
-
-	public void keyReleased(KeyEvent e) {
-		this.btnEnviar.setEnabled(verifica());
-	}
-
-	public void keyTyped(KeyEvent e) {
 	}
 
 	@Override
@@ -144,28 +97,13 @@ public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 	}
 
 	@Override
-	public String getNombre() {
-		return this.textNyA.getText();
-	}
-
-	@Override
-	public Date getFecha() {
-
-		String formato = "dd/MM/yyyy";
-		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(formato);
-		Date fecha = null;
-		try {
-			fecha = formatoDelTexto.parse(this.textFecha.getText());
-		} catch (ParseException ex) {
-			JOptionPane.showMessageDialog(null, "Fecha mal ingresada");
-			this.textFecha.setText("");
-		}
-		return fecha;
-	}
-
-	@Override
 	public int getCant() {
 		return (Integer) this.spinnerCant.getValue();
+	}
+
+	@Override
+	public int getNroComensales() {
+		return (Integer) this.spinnerNro.getValue();
 	}
 
 	@Override
@@ -271,9 +209,15 @@ public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 	}
 
 	@Override
-	public int getNroComensales() {
+	public String getNombre() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
+	}
+
+	@Override
+	public Date getFecha() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

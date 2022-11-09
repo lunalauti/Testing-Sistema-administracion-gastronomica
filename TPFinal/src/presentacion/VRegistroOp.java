@@ -260,4 +260,10 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public int getNroComensales() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

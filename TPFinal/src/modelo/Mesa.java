@@ -1,5 +1,7 @@
 package modelo;
 
+import java.io.Serializable;
+
 /**
  * Clase Mesa <br>
  * <b>Invariante: </b><br>
@@ -7,7 +9,7 @@ package modelo;
  * = "OCUPADA".
  */
 
-public class Mesa {
+public class Mesa implements Serializable {
 	public int nroMesa;
 	public int cantComensales;
 	public String estado; // libre-ocupada
@@ -27,7 +29,7 @@ public class Mesa {
 		this.asignado = false;
 		this.cantComensales = cantComensales;
 		this.invariante();
-		this.nroMesa=nroMesa;
+		this.nroMesa = nroMesa;
 
 	}
 

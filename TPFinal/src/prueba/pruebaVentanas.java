@@ -1,25 +1,34 @@
 package prueba;
 
-import controlador.ControladorLogin;
+import java.io.IOException;
+import java.io.Serializable;
+
+import controladores.ControladorLogin;
 import modelo.Cerveceria;
-import modelo.Mesa;
-import modelo.Operario;
-import modelo.Producto;
+import persistencia.CerveceriaDTO;
+import persistencia.IPersistencia;
+import persistencia.PersistenciaBIN;
+import persistencia.UtilPersistencia;
 
 public class pruebaVentanas {
 	public static void main(String[] args) {
-
+		IPersistencia<Serializable> persistencia = new PersistenciaBIN();
 		Cerveceria cerveceria = Cerveceria.getInstance();
-		// cerveceria.addOperario(new Operario("Juan", "Juancito", "Juan123456"));
-		cerveceria.addMesa(new Mesa(10));
-		cerveceria.addMesa(new Mesa(2));
-		cerveceria.addProducto(new Producto("Hamburguesa", 150, 300, 20));
-		cerveceria.addProducto(new Producto("Milanesa", 200.50, 450, 15));
-		ControladorLogin login = ControladorLogin.getInstance();
-		/*
-		 * ControladorAdmin admin= ControladorAdmin.getInstance(); admin.setVista(new
-		 * VAdmin());
-		 */
+		try {
+			persistencia.abrirInput("Cerveceria.bin");
+			System.out.println("Archivo abierto");
+			CerveceriaDTO cdto = (CerveceriaDTO) persistencia.leer();
+			UtilPersistencia.CerveceriaDTOToCerveceria(cdto, cerveceria);
+			System.out.println("Cerveceria recuperada");
+			persistencia.cerrarInput();
+			System.out.println("Archivo cerrado");
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+		}finally {
+			ControladorLogin.getInstance();
+		}
 	}
 
 }

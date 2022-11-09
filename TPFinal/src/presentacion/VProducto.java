@@ -268,4 +268,10 @@ public class VProducto extends JFrame implements IVistaAdmin, KeyListener {
 
 	}
 
+	@Override
+	public int getNroComensales() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

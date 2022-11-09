@@ -1,7 +1,7 @@
 package modelo;
 
-public enum Estado {
-    ACTIVO,
-    FRANCO,
-    AUSENTE
+import java.io.Serializable;
+
+public enum Estado implements Serializable {
+	ACTIVO, FRANCO, AUSENTE
 }
