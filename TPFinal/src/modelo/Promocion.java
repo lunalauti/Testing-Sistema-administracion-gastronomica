@@ -7,7 +7,8 @@ import java.util.ArrayList;
  * * Clase Promocion del modelo, es la clase padre de PromoProducto y
  * PromoTemporal <br>
  * <b>Invariante: </b><br>
- * -diasDePromo distintos de null y no puede estar vacio<br>
+ * -diasDePromo distintos de null y no puede estar vacio
+ * -idPromo > 0.
  */
 public class Promocion implements Serializable {
 
@@ -54,6 +55,14 @@ public class Promocion implements Serializable {
 		return dias;
 	}
 
+	public void invariante() {
+		
+		assert diasDePromo!=null && diasDePromo.size()>0:"diasDePromo debe ser distinto de null y contener al menos 1 elemento";
+		assert idPromo > 0: "El idPromo debe ser > 0";
+		
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "idPromo= #" + idPromo + ", diasDePromo=" + getDias();

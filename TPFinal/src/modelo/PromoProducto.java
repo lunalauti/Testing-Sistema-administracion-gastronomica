@@ -6,10 +6,10 @@ import java.util.ArrayList;
  * * Clase PromocionProducto del modelo, se extiende de Promocion y representa a
  * una promocion de determinado producto <br>
  * <b>Invariante: </b><br>
+ * -diasDePromo !=null. producto!=null y no debe estar vacio.
  * -id_promo,dtoPorCantidad_CantMinima y dtoPorCantidad_PrecioUnit deben ser
- * mayor a 0<br>
- * -aplicaDosPorUno debe ser true si aplicaDtoPorCantidad es false y viceversa.
- * <br>
+ * mayor a 0
+ * -si aplicaDosPorUno es true, aplicaDtoPorCantidad debe ser false y viceversa.
  */
 public class PromoProducto extends Promocion {
 	public Producto producto;
@@ -49,6 +49,7 @@ public class PromoProducto extends Promocion {
 		this.dtoPorCantidad_CantMinima = dtoPorCantidad_CantMinima;
 		this.dtoPorCantidad_PrecioUnit = dtoPorCantidad_PrecioUnit;
 		this.producto = producto;
+		this.invariante();
 	}
 
 	public Producto getProducto() {
@@ -57,6 +58,7 @@ public class PromoProducto extends Promocion {
 
 	public void setProducto(Producto producto) {
 		this.producto = producto;
+		this.invariante();
 	}
 
 	public boolean isAplicaDosPorUno() {
@@ -65,6 +67,7 @@ public class PromoProducto extends Promocion {
 
 	public void setAplicaDosPorUno(boolean aplicaDosPorUno) {
 		this.aplicaDosPorUno = aplicaDosPorUno;
+		this.invariante();
 	}
 
 	public boolean isAplicaDtoPorCantidad() {
@@ -73,6 +76,7 @@ public class PromoProducto extends Promocion {
 
 	public void setAplicaDtoPorCantidad(boolean aplicaDtoPorCantidad) {
 		this.aplicaDtoPorCantidad = aplicaDtoPorCantidad;
+		this.invariante();
 	}
 
 	public int getDtoPorCantidad_CantMinima() {
@@ -81,6 +85,7 @@ public class PromoProducto extends Promocion {
 
 	public void setDtoPorCantidad_CantMinima(int dtoPorCantidad_CantMinima) {
 		this.dtoPorCantidad_CantMinima = dtoPorCantidad_CantMinima;
+		this.invariante();
 	}
 
 	public double getDtoPorCantidad_PrecioUnit() {
@@ -89,6 +94,7 @@ public class PromoProducto extends Promocion {
 
 	public void setDtoPorCantidad_PrecioUnit(double dtoPorCantidad_PrecioUnit) {
 		this.dtoPorCantidad_PrecioUnit = dtoPorCantidad_PrecioUnit;
+		this.invariante();
 	}
 
 	public boolean isActiva() {
@@ -97,8 +103,20 @@ public class PromoProducto extends Promocion {
 
 	public void setActiva(boolean activa) {
 		this.activa = activa;
+		this.invariante();
 	}
 
+	public void invariante() {
+		
+		super.invariante();
+		assert this.dtoPorCantidad_CantMinima>0:"La cantidad minima para aplicar el desc por cant minima debe ser > 0";
+		assert this.dtoPorCantidad_PrecioUnit>0:"El precio unitario para aplicar dto por cantidad debe ser > 0";	
+		assert (this.aplicaDosPorUno==true && this.aplicaDtoPorCantidad==false) 
+				||(this.aplicaDosPorUno==false && this.aplicaDtoPorCantidad==true):
+				"si aplicaDosPorUno es true, aplicaDtoPorCantidad debe ser false y viceversa.";
+		assert this.producto!=null:"el producto debe ser distinto de null";
+	}
+	
 	@Override
 	public String toString() {
 		return "producto=" + producto + ", aplicaDosPorUno=" + aplicaDosPorUno + ", aplicaDtoPorCantidad="

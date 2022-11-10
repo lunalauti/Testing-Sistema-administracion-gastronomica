@@ -4,11 +4,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import excepciones.ComandaAbiertaException;
 import excepciones.MesaInexistenteException;
 import excepciones.MesaNoDisponibleException;
+import excepciones.MesaRepetidaException;
 import excepciones.MozoInexistenteException;
 import excepciones.MozoNoDisponibleException;
+import excepciones.MozoRepetidoException;
+import excepciones.ProductoEnComandaException;
+import excepciones.ProductoInexistenteException;
+import excepciones.ProductoRepetidoException;
 import excepciones.ProductosInvalidosException;
+import excepciones.PromoRepetidaException;
 import excepciones.UsuarioRepetidoException;
 import persistencia.CerveceriaDTO;
 import persistencia.IPersistencia;
@@ -298,18 +305,20 @@ public class Cerveceria {
 	}
 
 	/**
-	 * Agrega el operario pasado por par�metro al ArrayList de operarios.<br>
-	 * <b>Pre:</b> op != null<br>
+	 * Agrega el operario pasado por parametro al ArrayList de operarios.<br>
+	 * <b>Pre:</b> op != null. ArrayList de operarios inicializado. <br>
 	 * <b>Post:</b> El operario pasado por par�metro se agreg� al ArrayList de
 	 * operarios.<br>
 	 *
 	 * @param operario : Operario que se busca agregar a la cervecer�a.
-	 * @throws UsuarioRepetidoException : Se lanza si el operario ya hay un operario
+	 * @throws UsuarioRepetidoException : Se lanza si ya hay un operario
 	 *                                  registrado con el mismo username.
 	 */
 
 	public void addOperario(Operario op) throws UsuarioRepetidoException {
 
+		assert op!=null:"El operario debe ser distinto de null";
+		
 		for (Operario opAct : this.operarios) {
 			if (opAct.getUsername().equals(op.getUsername()))
 				throw new UsuarioRepetidoException(
@@ -337,15 +346,72 @@ public class Cerveceria {
 		return op;
 	}
 
-	public void addMozo(Mozo mozo) {
+	/**
+	 * Agrega el mozo pasado por parametro al ArrayList de mozos.<br>
+	 * <b>Pre:</b> mozo != null. <br>
+	 * <b>Post:</b> El mozo pasado por parametro se agrega al ArrayList de
+	 * mozos.<br>
+	 *
+	 * @param mozo : mozo que se desea agregar a la cerveceria.
+	 * @throws MozoRepetidoException : Se lanza si ya hay un mozo
+	 *                                  registrado con el mismo nombre.
+	 */
+	
+	public void addMozo(Mozo mozo) throws MozoRepetidoException{
+		
+		assert mozo!=null:"El mozo debe ser distinto de null";
+		
+		for (Mozo mozoAct : this.mozos) {
+			if (mozoAct.getNya().equals(mozo.getNya()))
+				throw new MozoRepetidoException(
+						"No se pudo registrar al mozo " + mozo.getNya() + ". Nombre y apellido del mozo repetido.");
+		}
+
 		this.mozos.add(mozo);
 	}
 
-	public void addProducto(Producto producto) {
+	/**
+	 * Agrega el producto pasado por parametro al ArrayList de productos.<br>
+	 * <b>Pre:</b> producto != null. <br>
+	 * <b>Post:</b> El producto pasado por parametro se agrega al ArrayList de
+	 * productos.<br>
+	 *
+	 * @param producto : producto que se desea agregar a la cerveceria.
+	 * @throws ProductoRepetidoException : Se lanza si ya hay un producto registrado con el mismo nombre.
+	 */
+	public void addProducto(Producto producto) throws ProductoRepetidoException {
+		
+		assert producto!=null:"El producto debe ser distinto de null";
+		
+		for (Producto prodAct : this.productos) {
+			if (prodAct.getNombre().equals(producto.getNombre()))
+				throw new ProductoRepetidoException(
+						"No se pudo registrar el producto " + producto.getNombre() + ". Nombre y apellido del mozo repetido.");
+		}
+
 		this.productos.add(producto);
 	}
 
-	public void addMesa(Mesa mesa) {
+	/**
+	 * Agrega la mesa pasada por parametro al ArrayList de mesas.<br>
+	 * <b>Pre:</b> mesa != null. <br>
+	 * <b>Post:</b> La mesa pasada por parametro se agrega al ArrayList de
+	 * mesas.<br>
+	 *
+	 * @param mesa : mesa que se desea agregar a la cerveceria.
+	 * @throws MesaRepetidaException : Se lanza si ya hay una mesa registrada con el mismo nroMesa.
+	 */
+	
+	public void addMesa(Mesa mesa) throws MesaRepetidaException {
+		
+		assert mesa!=null:"La mesa debe ser distinto de null";
+		
+		for (Mesa mesaAct : this.mesas) {
+			if (mesaAct.getNroMesa() == mesa.getNroMesa())
+				throw new MesaRepetidaException(
+						"No se pudo registrar la mesa " + mesa.getNroMesa() + ". Ya existe una mesa con el mismo numero.");
+		}
+
 		this.mesas.add(mesa);
 	}
 
@@ -361,7 +427,28 @@ public class Cerveceria {
 		this.promoTemporales.add(promo);
 	}
 
-	public void addPromoProd(PromoProducto promo) {
+	/**
+	 * Agrega una promo producto a la lista de promociones de producto de la cerveceria <br>
+	 * <b>Pre:</b> promo != null<br>
+
+	 * @param promo: promocion de Producto que se desea agregar al ArrayList de promociones de producto de la cerveceria.
+	 * @throws PromoRepetidaException : Se lanza si la promocion de producto ya existe en el ArrayList de promoProductos.
+	 * * @throws ProductoInexistenteException : Se lanza si la quiere agregar una promoProducto de un producto que no existe en la cerveceria.
+	 */
+	public void addPromoProd(PromoProducto promo) throws PromoRepetidaException,ProductoInexistenteException {
+		
+		assert promo!=null:"la promo debe ser distinto de null";
+		
+		if (!this.productos.contains(promo.getProducto()))
+			throw new ProductoInexistenteException("El producto"+promo.getProducto().getNombre()+" no existe en la cerveceria");
+		
+		else { //verifico si ya existe la misma promo
+			if (this.promosProducto.contains(promo))
+			throw new PromoRepetidaException("La promo de "+promo.getProducto().getNombre()+" ya existe en el sistema con los mismos valores");
+		}
+			
+		
+		
 		this.promosProducto.add(promo);
 	}
 
@@ -373,11 +460,16 @@ public class Cerveceria {
 		this.mozos.remove(mozo);
 	}
 
-	public void deleteProducto(Producto prod) {
+	public void deleteProducto(Producto prod) throws ProductoEnComandaException {
+		if (this.productos.contains(prod))
+			throw new ProductoEnComandaException("El producto no se puede eliminar ya que es parte de una comanda");
 		this.productos.remove(prod);
 	}
 
-	public void deleteMesa(Mesa mesa) {
+	public void deleteMesa(Mesa mesa) throws ComandaAbiertaException{
+		
+		if (mesa.estado.equalsIgnoreCase("OCUPADA"))
+			throw new ComandaAbiertaException("La mesa " + mesa.getNroMesa()+ " no se puede eliminar ya que tiene una comanda abierta");
 		this.mesas.remove(mesa);
 	}
 

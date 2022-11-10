@@ -17,19 +17,19 @@ public class Mesa implements Serializable {
 
 	/**
 	 * Crea una nueva instancia de una mesa. <br>
-	 * <b>Pre:</b> cantComensales > 0.<br>
+	 * <b>Pre:</b> cantComensales > 0.nroMesa >=0<br>
 	 * <b>Post:</b> Se instancia una nueva mesa con estado "LIBRE", sin asignar, con
-	 * un numero de mesa determinado por el incremental. Ademas, tendra la
-	 * cantComensales pasada por paraemtro.<br>
+	 * un numero de mesa y cantComensales pasados por parametro.<br>
 	 * 
 	 * @param cantComensales: cantidad de sillas que posee la mesa.
+	 * @param nroMesa: numero de mesa de la mesa a instanciar.
 	 */
 	public Mesa(int cantComensales, int nroMesa) {
 		this.estado = "LIBRE";
 		this.asignado = false;
 		this.cantComensales = cantComensales;
-		this.invariante();
 		this.nroMesa = nroMesa;
+		this.invariante();
 
 	}
 

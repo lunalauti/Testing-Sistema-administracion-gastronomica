@@ -3,7 +3,6 @@ package modelo;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import excepciones.CantInsuficienteProdException;
 import excepciones.MesaInexistenteException;
 import excepciones.MesaNoDisponibleException;
 import excepciones.MozoInexistenteException;
@@ -64,6 +63,7 @@ public class Operario implements Serializable{
 
 	public void setActivo(boolean activo) {
 		this.activo = activo;
+		this.invariante();
 	}
 
 	/**
@@ -82,11 +82,15 @@ public class Operario implements Serializable{
 	 *                                  cerveceria.
 	 */
 	public void setEstado(Mozo mozo, Estado e) throws MozoInexistenteException {
+		
 		assert mozo != null : "El mozo debe ser distinto de null.";
 		assert e != null : "El estado debe ser distinto de null";
+		
 		assert e == Estado.ACTIVO || e == Estado.FRANCO || e == Estado.AUSENTE
 				: "El estado no puede ser diferente de ACTIVO, FRANCO o AUSENTE";
+		
 		Cerveceria.getInstance().setEstado(mozo, e);
+		this.invariante();
 	}
 
 	/**
@@ -100,21 +104,23 @@ public class Operario implements Serializable{
 	 * @param mozo  : instancia de la clase Mozo que se le asignara la mesa pasada
 	 *              por parametro.
 	 * @param mesa: mesa que se le asignara al mozo pasado por parametro.
-	 * @throws MozoNoDisponibleException : Se lanza si el mozo pasado por par�metro
-	 *                                   no est� disponible.
-	 * @throws MozoInexsitenteException  : Se lanza si el mozo pasado por par�metro
+	 * @throws MozoNoDisponibleException : Se lanza si el mozo pasado por parametro
+	 *                                   no esta disponible.
+	 * @throws MozoInexsitenteException  : Se lanza si el mozo pasado por parametro
 	 *                                   no existe en el ArrayList de mozos de la
 	 *                                   cerveceria.
-	 * @throws MesaNoDisponibleException : Se lanza si la mesa pasada por par�metro
-	 *                                   no est� disponible.
-	 * @throws MesaInexsitenteException  : Se lanza si la mesa pasada por par�metro
+	 * @throws MesaNoDisponibleException : Se lanza si la mesa pasada por parametro
+	 *                                   no esta disponible.
+	 * @throws MesaInexsitenteException  : Se lanza si la mesa pasada por parametro
 	 *                                   no existe en el ArrayList de mesas de la
 	 *                                   cerveceria..
 	 */
 	public void asignarMesa(Mozo mozo, Mesa mesa) throws MozoNoDisponibleException, MozoInexistenteException,
 			MesaNoDisponibleException, MesaInexistenteException {
+		
 		assert mozo != null : "El mozo debe ser distinto de null";
 		assert mesa != null : "La mesa debe ser distinto de null";
+		
 		Cerveceria.getInstance().asignarMesa(mozo, mesa);
 	}
 
@@ -130,10 +136,12 @@ public class Operario implements Serializable{
 	 * @param mesa:      mesa que se desea cerrar.
 	 * @param formaPago: cadena que indicara la forma de pago del cliente.
 	 */
-	public void cerrarMesa(Mesa mesa, String formaPago) throws CantInsuficienteProdException {
+	public void cerrarMesa(Mesa mesa, String formaPago){
+		
 		assert mesa != null : "la mesa debe ser distinto de null";
 		assert formaPago.equals("efectivo") || formaPago.equals("tarjeta") || formaPago.equals("mercPago")
 				|| formaPago.equals("ctaDNI") : "forma de pago incorrecta";
+		
 		Cerveceria.getInstance().cerrarMesa(mesa, formaPago);
 	}
 
@@ -152,9 +160,11 @@ public class Operario implements Serializable{
 	 */
 	public void tomarPedido(Mesa mesa, ArrayList<Pedido> pedidos)
 			throws MesaInexistenteException, ProductosInvalidosException {
+		
 		assert pedidos != null && pedidos.size() > 0
 				: "pedidos debe ser distinto de null y debe haberse realizado el pedido de al menos 1 producto";
 		assert mesa != null : "la mesa debe ser distinto de null";
+		
 		Cerveceria.getInstance().tomarComanda(mesa, pedidos);
 	}
 
@@ -176,9 +186,9 @@ public class Operario implements Serializable{
 	}
 
 	public void invariante() {
-		assert this.nya != null && this.nya != "" : "El nombre y apellido del usuario no puede ser null ni vacio.";
-		assert this.username != null && this.username != "" : "El username no puede ser null ni vacio.";
-		assert this.password != null && this.password != "" : "El password no puede ser null ni vacio.";
+		assert this.nya != null && !this.nya.equals("") : "El nombre y apellido del usuario no puede ser null ni vacio.";
+		assert this.username != null && !this.username.equals("") : "El username no puede ser null ni vacio.";
+		assert this.password != null && !this.password.equals("") : "El password no puede ser null ni vacio.";
 
 	}
 

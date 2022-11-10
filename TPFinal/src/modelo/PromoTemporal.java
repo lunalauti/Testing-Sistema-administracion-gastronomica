@@ -5,7 +5,8 @@ import java.util.ArrayList;
 /**
  * * Clase PromocionTemporal del modelo, se extiende de Promocion y representa a una promocion de determinado dia <br>
  * <b>Invariante: </b>nombre y forma de pago no deben ser null ni vacio<br>
- * -procentajeDesc debe ser mayor que 0<br>
+ * -formaPagodebe ser: efectivo, tarjeta, mercPago o ctaDNI
+ * -porcentajeDesc debe ser mayor que 0<br>
  */
 public class PromoTemporal extends Promocion {
     public String nombre;
@@ -35,6 +36,7 @@ public class PromoTemporal extends Promocion {
         this.porcentajeDesc = porcentajeDesc;
         this.activa = true;
         this.esAcumulable = esAcumulable;
+        this.invariante();
     }
 
     public String getNombre() {
@@ -43,6 +45,7 @@ public class PromoTemporal extends Promocion {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+        this.invariante();
     }
 
     public String getFormaPago() {
@@ -51,6 +54,7 @@ public class PromoTemporal extends Promocion {
 
     public void setFormaPago(String formaPago) {
         this.formaPago = formaPago;
+        this.invariante();
     }
 
     public int getPorcentajeDesc() {
@@ -59,6 +63,7 @@ public class PromoTemporal extends Promocion {
 
     public void setPorcentajeDesc(int porcentajeDesc) {
         this.porcentajeDesc = porcentajeDesc;
+        this.invariante();
     }
 
     public boolean isActiva() {
@@ -67,6 +72,7 @@ public class PromoTemporal extends Promocion {
 
     public void setActiva(boolean activa) {
         this.activa = activa;
+        this.invariante();
     }
 
     public boolean isEsAcumulable() {
@@ -75,8 +81,21 @@ public class PromoTemporal extends Promocion {
 
     public void setEsAcumulable(boolean esAcumulable) {
         this.esAcumulable = esAcumulable;
+        this.invariante();
     }
 
+    public void invariante() {
+    	
+		super.invariante();
+		assert this.nombre!=null && !this.nombre.equals(""):"el nombre debe ser distinto de null y string vacio";
+		assert this.formaPago!=null && !this.formaPago.equals(""):"el nombre debe ser distinto de null y string vacio";
+		assert this.formaPago.equalsIgnoreCase("efectivo") || this.formaPago.equalsIgnoreCase("tarjeta") ||
+		this.formaPago.equalsIgnoreCase("mercPago") || this.formaPago.equalsIgnoreCase("ctaDNI"):"El medio de pago debe ser: efectivo, tarjeta, mercPago o ctaDNI";
+		assert this.porcentajeDesc > 0: "procentajeDesc debe ser mayor que 0";
+    }
+    
+    
+    
 	@Override
 	public String toString() {
 		return "nombre=" + nombre + ", formaPago=" + formaPago + ", porcentajeDesc=" + porcentajeDesc + ", activa="

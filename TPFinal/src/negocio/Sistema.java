@@ -10,11 +10,17 @@ import controladores.ControladorAdmin;
 import controladores.ControladorLogin;
 import controladores.ControladorOperario;
 import controladores.ControladorPromo;
-import excepciones.CantInsuficienteProdException;
+import excepciones.ComandaAbiertaException;
 import excepciones.MesaInexistenteException;
 import excepciones.MesaNoDisponibleException;
+import excepciones.MesaRepetidaException;
 import excepciones.MozoInexistenteException;
 import excepciones.MozoNoDisponibleException;
+import excepciones.MozoRepetidoException;
+import excepciones.ProductoEnComandaException;
+import excepciones.ProductoInexistenteException;
+import excepciones.ProductoRepetidoException;
+import excepciones.PromoRepetidaException;
 import excepciones.UsuarioRepetidoException;
 import modelo.Cerveceria;
 import modelo.Estado;
@@ -87,19 +93,24 @@ public class Sistema {
 	@SuppressWarnings("deprecation")
 	public void addMozo(String nya, Date fecha, int cantHijos) {
 
-		int edad = Date.from(Instant.now()).getYear() - fecha.getYear();
+		try {
+			int edad = Date.from(Instant.now()).getYear() - fecha.getYear();
 
-		if (edad > 18 || (edad == 18 && fecha.getMonth() <= Date.from(Instant.now()).getMonth())) {
-			Mozo mozo = new Mozo(nya.toUpperCase(), fecha, cantHijos);
-			cerveceria.getAdmin().addMozo(mozo);
-			ControladorAdmin.getInstance().getVista().cerrarse();
-			ControladorAdmin.getInstance().setVista(new VAdmin());
-			ControladorAdmin.getInstance().getVista().notificar("Mozo registrado correctamente");
-			actualizarListaAdmin();
-			persistir();
+			if (edad > 18 || (edad == 18 && fecha.getMonth() <= Date.from(Instant.now()).getMonth())) {
+				cerveceria.getAdmin().addMozo(nya.toUpperCase(), fecha, cantHijos);
+				ControladorAdmin.getInstance().getVista().cerrarse();
+				ControladorAdmin.getInstance().setVista(new VAdmin());
+				ControladorAdmin.getInstance().getVista().notificar("Mozo registrado correctamente");
+				actualizarListaAdmin();
+				persistir();
 
-		} else
-			ControladorAdmin.getInstance().getVista().notificar("No se puede registrar mozo, debe ser mayor a 18 años");
+			} else
+				ControladorAdmin.getInstance().getVista().notificar("No se puede registrar mozo, debe ser mayor a 18 años");
+		}
+		catch (MozoRepetidoException e) {
+			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
+		}
+
 	}
 
 	public void addOperario(String nya, String user, String pass) {
@@ -133,7 +144,7 @@ public class Sistema {
 
 	public void addProducto(String nombre, double pCosto, double pVenta, double stock) {
 		try {
-			cerveceria.getAdmin().addProducto(new Producto(nombre, pCosto, pVenta, stock));
+			cerveceria.getAdmin().addProducto(nombre, pCosto, pVenta, stock);
 
 			ControladorAdmin.getInstance().getVista().cerrarse();
 			ControladorAdmin.getInstance().setVista(new VAdmin());
@@ -152,7 +163,7 @@ public class Sistema {
 			actualizarListaAdmin();
 			persistir();
 		} catch (MesaRepetidaException e) {
-			ControladorAdmin.getInstance().getVista().notificar("Nro de mesa repetido");
+			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
 		}
 	}
 
@@ -168,13 +179,21 @@ public class Sistema {
 
 	public void addPromoProducto(ArrayList<String> dias, Producto producto, boolean dosPorUno, boolean dtoPorCantidad,
 			int cantMinima, double precioUnit) {
-		cerveceria.getAdmin()
-				.addPromoProducto(new PromoProducto(dias, producto, dosPorUno, dtoPorCantidad, cantMinima, precioUnit));
-		ControladorPromo.getInstance().getVista().cerrarse();
-		ControladorAdmin.getInstance().setVista(new VAdmin());
-		ControladorAdmin.getInstance().getVista().notificar("Promocion registrada correctamente");
-		actualizarListaAdmin();
-		persistir();
+		try {
+			cerveceria.getAdmin().addPromoProducto(dias, producto, dosPorUno, dtoPorCantidad, cantMinima, precioUnit);
+			ControladorPromo.getInstance().getVista().cerrarse();
+			ControladorAdmin.getInstance().setVista(new VAdmin());
+			ControladorAdmin.getInstance().getVista().notificar("Promocion registrada correctamente");
+			actualizarListaAdmin();
+			persistir();
+		}
+		catch (ProductoInexistenteException e) {
+			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
+		}
+		catch (PromoRepetidaException e) {
+			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
+		}
+
 	}
 
 	public void deleteProducto(Producto producto) {
@@ -185,7 +204,7 @@ public class Sistema {
 			persistir();
 		} catch (ProductoEnComandaException e) {
 			ControladorAdmin.getInstance().getVista()
-					.notificar("No se puede eliminar un producto asociado a una comanda");
+					.notificar(e.getMessage());
 		}
 	}
 
@@ -195,9 +214,10 @@ public class Sistema {
 			ControladorAdmin.getInstance().getVista().actualizaListaMesas(cerveceria.getMesas());
 			ControladorAdmin.getInstance().getVista().notificar("Mesa eliminada correctamente");
 			persistir();
+			
 		} catch (ComandaAbiertaException e) {
 			ControladorAdmin.getInstance().getVista()
-					.notificar("No se puede eliminar una mesa con una comanda abierta");
+					.notificar(e.getMessage());
 		}
 	}
 
@@ -282,14 +302,18 @@ public class Sistema {
 			ControladorOperario.getInstance().getVista().actualizaListaVenta(cerveceria.getVentas());
 			ControladorOperario.getInstance().getVista().actualizaListaComanda(cerveceria.getComandasAbiertas());
 			persistir();
-		} catch (CantInsuficienteProdException e) {
-			ControladorOperario.getInstance().getVista().notificar("");
 		}
+		finally {
+			
+		}
+//		} catch (CantInsuficienteProdException e) {
+//			ControladorOperario.getInstance().getVista().notificar("");
+//		}
 	}
 
 	public void getEstadisticas(Mozo mozo) {
-		String informe = this.opLogueado.getEstadisticas(mozo);
-		ControladorOperario.getInstance().getVista().notificar(informe);
+		//String informe = this.opLogueado.getEstadisticas(mozo);
+		//ControladorOperario.getInstance().getVista().notificar(informe);
 	}
 
 	public void agregaPedido(Producto producto, double cant) {
@@ -312,9 +336,12 @@ public class Sistema {
 			ControladorOperario.getInstance().getVista()
 					.notificar("Pedido de la mesa #" + mesa.getNroMesa() + " tomado correctamente");
 			persistir();
-		} catch (PromosInactivasException e) {
-			ControladorOperario.getInstance().getVista().notificar("Mesa cerrada correctamente");
+		} 
+		catch (Exception e) {
+			ControladorOperario.getInstance().getVista().notificar(e.getMessage());
 		}
+
+			
 	}
 
 	public void persistir() {
