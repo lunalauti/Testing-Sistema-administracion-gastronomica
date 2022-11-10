@@ -102,6 +102,7 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 	private JList<String> listNotificacion;
 	private DefaultListModel<String> modeloListaNoti = new DefaultListModel<String>();
 	private JPanel panel_19;
+	private JButton btnCerrarJornada;
 
 	public VAdmin() {
 
@@ -130,7 +131,7 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 
 		this.panel_3 = new JPanel();
 		this.panel.add(this.panel_3);
-		this.panel_3.setLayout(new GridLayout(6, 0, 0, 0));
+		this.panel_3.setLayout(new GridLayout(7, 0, 0, 0));
 
 		this.btnOperario = new JButton("AGREGAR OPERARIO");
 		this.btnOperario.setActionCommand("OPERARIO");
@@ -155,6 +156,10 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 		this.btnPromocion = new JButton("AGREGAR PROMOCION");
 		this.btnPromocion.setActionCommand("PROMOCION");
 		this.panel_3.add(this.btnPromocion);
+
+		this.btnCerrarJornada = new JButton("CERRAR JORNADA");
+		this.btnCerrarJornada.setActionCommand("CERRAR_JORNADA");
+		this.panel_3.add(this.btnCerrarJornada);
 
 		this.btnSalir = new JButton("SALIR");
 		this.btnSalir.setActionCommand("SALIR_ADMIN");
@@ -412,6 +417,7 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 		this.btnProducto.addActionListener(actionListener);
 		this.btnPromocion.addActionListener(actionListener);
 		this.btnSalir.addActionListener(actionListener);
+		this.btnCerrarJornada.addActionListener(actionListener);
 		this.actionListener = actionListener;
 	}
 
@@ -442,12 +448,6 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 	public Date getFecha() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public int getCant() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -612,5 +612,11 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 	public boolean getActivo() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int getCant() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

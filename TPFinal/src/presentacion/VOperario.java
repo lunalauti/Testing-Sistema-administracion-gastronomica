@@ -78,6 +78,7 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 	private JScrollPane scrollPane_4;
 	private JList<String> listNotificacion;
 	private DefaultListModel<String> modeloListaNoti = new DefaultListModel<String>();
+	private JButton btnCerrarJornada;
 
 	public VOperario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -167,7 +168,7 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 
 		this.panel_4 = new JPanel();
 		this.panel_1.add(this.panel_4, BorderLayout.SOUTH);
-		this.panel_4.setLayout(new GridLayout(4, 0, 0, 0));
+		this.panel_4.setLayout(new GridLayout(5, 0, 0, 0));
 
 		this.btnAsignar = new JButton("ASIGNAR");
 		this.btnAsignar.setEnabled(false);
@@ -203,6 +204,10 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 		this.btnCerrar.setEnabled(false);
 		this.btnCerrar.setActionCommand("CERRAR");
 		this.panel_5.add(this.btnCerrar);
+
+		this.btnCerrarJornada = new JButton("CERRAR JORNADA");
+		this.btnCerrarJornada.setActionCommand("CERRAR_JORNADA");
+		this.panel_4.add(this.btnCerrarJornada);
 
 		this.btnSalir = new JButton("SALIR");
 		this.panel_4.add(this.btnSalir);
@@ -272,6 +277,7 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 		this.btnAsignar.addActionListener(actionListener);
 		this.btnEstadisticas.addActionListener(actionListener);
 		this.btnCerrar.addActionListener(actionListener);
+		this.btnCerrarJornada.addActionListener(actionListener);
 		this.btnSalir.addActionListener(actionListener);
 		this.actionListener = actionListener;
 	}
@@ -322,7 +328,7 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 	public String getSelectedPago() {
 		return (String) this.comboBoxPago.getSelectedItem();
 	}
-	
+
 	@Override
 	public void notificar(String noti) {
 		this.modeloListaNoti.addElement(noti);
@@ -348,9 +354,8 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 	@Override
 	public void actualizaListaProducto(ArrayList<Producto> productos) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public ArrayList<Pedido> getListaPedidos() {
@@ -367,13 +372,13 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 	@Override
 	public void agregaPedido(Pedido pedido) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void borraPedido(Pedido pedido) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

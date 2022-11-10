@@ -98,11 +98,6 @@ public class VMesa extends JFrame implements IVistaAdmin {
 	}
 
 	@Override
-	public int getCant() {
-		return (Integer) this.spinnerCant.getValue();
-	}
-
-	@Override
 	public int getNroComensales() {
 		return (Integer) this.spinnerNro.getValue();
 	}
@@ -250,6 +245,11 @@ public class VMesa extends JFrame implements IVistaAdmin {
 	public boolean getActivo() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int getCant() {
+		return (Integer) this.spinnerCant.getValue();
 	}
 
 }

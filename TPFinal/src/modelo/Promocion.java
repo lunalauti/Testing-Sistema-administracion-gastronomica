@@ -27,7 +27,7 @@ public class Promocion implements Serializable {
 	 * @param activa:     Determina si la promo esta activa o no
 	 */
 	public Promocion(ArrayList<String> diasDePromo) {
-		this.idPromo = incremental++;
+		this.idPromo = ++incremental;
 		this.diasDePromo = diasDePromo;
 		this.activa = true;
 	}

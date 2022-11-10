@@ -15,7 +15,7 @@ public class Producto implements Serializable {
 	public String nombre;
 	public double pCosto;
 	public double pVenta;
-	public double stock;
+	public int stock;
 
 	/**
 	 * Crea una nueva instancia de un Producto. <br>
@@ -31,7 +31,7 @@ public class Producto implements Serializable {
 	 *               producto
 	 * @param stock: Es la cantidad de producto con la que cuenta la cerveceria
 	 */
-	public Producto(String nombre, double pCosto, double pVenta, double stock) {
+	public Producto(String nombre, double pCosto, double pVenta, int stock) {
 
 		this.nombre = nombre;
 		this.pCosto = pCosto;
@@ -107,7 +107,7 @@ public class Producto implements Serializable {
 				+ ", Stock=" + stock;
 	}
 
-	public void setStock(double stock) {
+	public void setStock(int stock) {
 		this.stock = stock;
 	}
 

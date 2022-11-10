@@ -175,10 +175,7 @@ public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 		this.btnEnviar.setEnabled(verifica());
 	}
 
-	@Override
-	public int getCant() {
-		return (Integer) this.spinnerCant.getValue();
-	}
+
 
 	@Override
 	public String getUsername() {
@@ -309,6 +306,11 @@ public class VMozo extends JFrame implements KeyListener, IVistaAdmin {
 	public boolean getActivo() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int getCant() {
+		return (Integer) this.spinnerCant.getValue();
 	}
 
 }

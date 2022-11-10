@@ -105,9 +105,9 @@ public class Sistema {
 				persistir();
 
 			} else
-				ControladorAdmin.getInstance().getVista().notificar("No se puede registrar mozo, debe ser mayor a 18 años");
-		}
-		catch (MozoRepetidoException e) {
+				ControladorAdmin.getInstance().getVista()
+						.notificar("No se puede registrar mozo, debe ser mayor a 18 años");
+		} catch (MozoRepetidoException e) {
 			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
 		}
 
@@ -142,7 +142,7 @@ public class Sistema {
 
 	}
 
-	public void addProducto(String nombre, double pCosto, double pVenta, double stock) {
+	public void addProducto(String nombre, double pCosto, double pVenta, int stock) {
 		try {
 			cerveceria.getAdmin().addProducto(nombre, pCosto, pVenta, stock);
 
@@ -186,11 +186,9 @@ public class Sistema {
 			ControladorAdmin.getInstance().getVista().notificar("Promocion registrada correctamente");
 			actualizarListaAdmin();
 			persistir();
-		}
-		catch (ProductoInexistenteException e) {
+		} catch (ProductoInexistenteException e) {
 			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
-		}
-		catch (PromoRepetidaException e) {
+		} catch (PromoRepetidaException e) {
 			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
 		}
 
@@ -203,8 +201,7 @@ public class Sistema {
 			ControladorAdmin.getInstance().getVista().notificar("Producto eliminado correctamente");
 			persistir();
 		} catch (ProductoEnComandaException e) {
-			ControladorAdmin.getInstance().getVista()
-					.notificar(e.getMessage());
+			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
 		}
 	}
 
@@ -214,10 +211,9 @@ public class Sistema {
 			ControladorAdmin.getInstance().getVista().actualizaListaMesas(cerveceria.getMesas());
 			ControladorAdmin.getInstance().getVista().notificar("Mesa eliminada correctamente");
 			persistir();
-			
+
 		} catch (ComandaAbiertaException e) {
-			ControladorAdmin.getInstance().getVista()
-					.notificar(e.getMessage());
+			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
 		}
 	}
 
@@ -302,9 +298,8 @@ public class Sistema {
 			ControladorOperario.getInstance().getVista().actualizaListaVenta(cerveceria.getVentas());
 			ControladorOperario.getInstance().getVista().actualizaListaComanda(cerveceria.getComandasAbiertas());
 			persistir();
-		}
-		finally {
-			
+		} finally {
+
 		}
 //		} catch (CantInsuficienteProdException e) {
 //			ControladorOperario.getInstance().getVista().notificar("");
@@ -312,8 +307,8 @@ public class Sistema {
 	}
 
 	public void getEstadisticas(Mozo mozo) {
-		//String informe = this.opLogueado.getEstadisticas(mozo);
-		//ControladorOperario.getInstance().getVista().notificar(informe);
+		String informe = this.opLogueado.getEstadisticas(mozo);
+		ControladorOperario.getInstance().getVista().notificar(informe);
 	}
 
 	public void agregaPedido(Producto producto, double cant) {
@@ -336,15 +331,24 @@ public class Sistema {
 			ControladorOperario.getInstance().getVista()
 					.notificar("Pedido de la mesa #" + mesa.getNroMesa() + " tomado correctamente");
 			persistir();
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			ControladorOperario.getInstance().getVista().notificar(e.getMessage());
 		}
 
-			
 	}
 
 	public void persistir() {
 		cerveceria.persistir();
+	}
+
+	public void cerrarJornada() {
+		try {
+			cerveceria.cerrarJornada();
+			ControladorOperario.getInstance().getVista().actualizaListaMesas(cerveceria.getMesas());
+			ControladorOperario.getInstance().getVista().actualizaListaMozos(cerveceria.getMozos());
+			ControladorOperario.getInstance().getVista().notificar("Jornada cerrada correctamente");
+		} catch (ComandaAbiertaException e) {
+			ControladorOperario.getInstance().getVista().notificar(e.getMessage());
+		}
 	}
 }

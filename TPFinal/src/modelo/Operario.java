@@ -3,6 +3,7 @@ package modelo;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import excepciones.ComandaAbiertaException;
 import excepciones.MesaInexistenteException;
 import excepciones.MesaNoDisponibleException;
 import excepciones.MozoInexistenteException;
@@ -16,7 +17,7 @@ import excepciones.ProductosInvalidosException;
  * password !=null y distinto de vacio.
  */
 @SuppressWarnings("serial")
-public class Operario implements Serializable{
+public class Operario implements Serializable {
 	private String nya;
 	private String username;
 	private String password;
@@ -82,13 +83,13 @@ public class Operario implements Serializable{
 	 *                                  cerveceria.
 	 */
 	public void setEstado(Mozo mozo, Estado e) throws MozoInexistenteException {
-		
+
 		assert mozo != null : "El mozo debe ser distinto de null.";
 		assert e != null : "El estado debe ser distinto de null";
-		
+
 		assert e == Estado.ACTIVO || e == Estado.FRANCO || e == Estado.AUSENTE
 				: "El estado no puede ser diferente de ACTIVO, FRANCO o AUSENTE";
-		
+
 		Cerveceria.getInstance().setEstado(mozo, e);
 		this.invariante();
 	}
@@ -117,10 +118,10 @@ public class Operario implements Serializable{
 	 */
 	public void asignarMesa(Mozo mozo, Mesa mesa) throws MozoNoDisponibleException, MozoInexistenteException,
 			MesaNoDisponibleException, MesaInexistenteException {
-		
+
 		assert mozo != null : "El mozo debe ser distinto de null";
 		assert mesa != null : "La mesa debe ser distinto de null";
-		
+
 		Cerveceria.getInstance().asignarMesa(mozo, mesa);
 	}
 
@@ -136,12 +137,12 @@ public class Operario implements Serializable{
 	 * @param mesa:      mesa que se desea cerrar.
 	 * @param formaPago: cadena que indicara la forma de pago del cliente.
 	 */
-	public void cerrarMesa(Mesa mesa, String formaPago){
-		
+	public void cerrarMesa(Mesa mesa, String formaPago) {
+
 		assert mesa != null : "la mesa debe ser distinto de null";
 		assert formaPago.equals("efectivo") || formaPago.equals("tarjeta") || formaPago.equals("mercPago")
 				|| formaPago.equals("ctaDNI") : "forma de pago incorrecta";
-		
+
 		Cerveceria.getInstance().cerrarMesa(mesa, formaPago);
 	}
 
@@ -160,11 +161,11 @@ public class Operario implements Serializable{
 	 */
 	public void tomarPedido(Mesa mesa, ArrayList<Pedido> pedidos)
 			throws MesaInexistenteException, ProductosInvalidosException {
-		
+
 		assert pedidos != null && pedidos.size() > 0
 				: "pedidos debe ser distinto de null y debe haberse realizado el pedido de al menos 1 producto";
 		assert mesa != null : "la mesa debe ser distinto de null";
-		
+
 		Cerveceria.getInstance().tomarComanda(mesa, pedidos);
 	}
 
@@ -180,13 +181,13 @@ public class Operario implements Serializable{
 		return this.password;
 	}
 
-	
 	public boolean isActivo() {
 		return activo;
 	}
 
 	public void invariante() {
-		assert this.nya != null && !this.nya.equals("") : "El nombre y apellido del usuario no puede ser null ni vacio.";
+		assert this.nya != null && !this.nya.equals("")
+				: "El nombre y apellido del usuario no puede ser null ni vacio.";
 		assert this.username != null && !this.username.equals("") : "El username no puede ser null ni vacio.";
 		assert this.password != null && !this.password.equals("") : "El password no puede ser null ni vacio.";
 
@@ -195,6 +196,14 @@ public class Operario implements Serializable{
 	@Override
 	public String toString() {
 		return "nya=" + nya + ", username=" + username + ", password=" + password + ", activo=" + activo;
+	}
+
+	public String getEstadisticas(Mozo mozo) {
+		return Cerveceria.getInstance().getEstadisticas(mozo);
+	}
+
+	public void cerrarJornada() throws ComandaAbiertaException {
+		Cerveceria.getInstance().cerrarJornada();
 	}
 
 }

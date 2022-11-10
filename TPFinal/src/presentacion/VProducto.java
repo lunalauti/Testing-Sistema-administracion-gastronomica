@@ -146,11 +146,6 @@ public class VProducto extends JFrame implements IVistaAdmin, KeyListener {
 	}
 
 	@Override
-	public int getCant() {
-		return (Integer) this.spinnerStock.getValue();
-	}
-
-	@Override
 	public String getUsername() {
 		return null;
 	}
@@ -306,6 +301,11 @@ public class VProducto extends JFrame implements IVistaAdmin, KeyListener {
 	public boolean getActivo() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int getCant() {
+		return (int) this.spinnerStock.getValue();
 	}
 
 }

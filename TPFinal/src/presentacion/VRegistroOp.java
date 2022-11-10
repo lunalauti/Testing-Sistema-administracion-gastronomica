@@ -166,12 +166,6 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 	}
 
 	@Override
-	public int getCant() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public String getNombre() {
 		// TODO Auto-generated method stub
 		return this.textNyA.getText();
@@ -304,5 +298,11 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 	@Override
 	public boolean getActivo() {
 		return this.checkBoxActivo.isSelected();
+	}
+
+	@Override
+	public int getCant() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

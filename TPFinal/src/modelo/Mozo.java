@@ -152,6 +152,12 @@ public class Mozo implements Serializable {
 		this.cantVentas = 0;
 		this.invariante();
 	}
+	
+	
+
+	public ArrayList<Mesa> getMesas() {
+		return mesas;
+	}
 
 	@SuppressWarnings("deprecation")
 	public int getEdad() {

@@ -78,6 +78,8 @@ public class ControladorOperario implements ActionListener {
 		} else if (comando.equalsIgnoreCase("ELIMINAR_PEDIDO")) {
 			Pedido pedido=this.vista.getPedido();
 			this.vista.borraPedido(pedido);
+		}else if(comando.equalsIgnoreCase("CERRAR_JORNADA")) {
+			Sistema.getInstance().cerrarJornada();
 		}
 	}
 

@@ -197,6 +197,10 @@ public class Cerveceria {
 					total += pedido.getProducto().getpVenta() * pedido.getCantidad();
 			}
 
+			// busca el mozo que tiene asignada la mesa
+			Mozo mozo = BuscarMozo(mesa);
+			mozo.addCantVentas();
+			mozo.addTotalVentas(total);
 			comandaAct.setEstado("CERRADA");
 			mesa.setEstado("LIBRE");
 			this.ventas.add(new Venta(comandaAct, total, formaPago, listaPromos));
@@ -205,6 +209,18 @@ public class Cerveceria {
 		} else
 			System.out.println("LA MESA NO TIENE COMANDAS ABIERTAS");
 
+	}
+
+	private Mozo BuscarMozo(Mesa mesa) {
+		boolean enc = false;
+		Mozo mozo = null;
+		Iterator<Mozo> mozoIt = this.getMozos().iterator();
+		while (mozoIt.hasNext() && !enc) {
+			mozo = mozoIt.next();
+			if (mozo.getMesas().contains(mesa))
+				enc = true;
+		}
+		return mozo;
 	}
 
 	/**
@@ -311,14 +327,14 @@ public class Cerveceria {
 	 * operarios.<br>
 	 *
 	 * @param operario : Operario que se busca agregar a la cervecer�a.
-	 * @throws UsuarioRepetidoException : Se lanza si ya hay un operario
-	 *                                  registrado con el mismo username.
+	 * @throws UsuarioRepetidoException : Se lanza si ya hay un operario registrado
+	 *                                  con el mismo username.
 	 */
 
 	public void addOperario(Operario op) throws UsuarioRepetidoException {
 
-		assert op!=null:"El operario debe ser distinto de null";
-		
+		assert op != null : "El operario debe ser distinto de null";
+
 		for (Operario opAct : this.operarios) {
 			if (opAct.getUsername().equals(op.getUsername()))
 				throw new UsuarioRepetidoException(
@@ -353,14 +369,14 @@ public class Cerveceria {
 	 * mozos.<br>
 	 *
 	 * @param mozo : mozo que se desea agregar a la cerveceria.
-	 * @throws MozoRepetidoException : Se lanza si ya hay un mozo
-	 *                                  registrado con el mismo nombre.
+	 * @throws MozoRepetidoException : Se lanza si ya hay un mozo registrado con el
+	 *                               mismo nombre.
 	 */
-	
-	public void addMozo(Mozo mozo) throws MozoRepetidoException{
-		
-		assert mozo!=null:"El mozo debe ser distinto de null";
-		
+
+	public void addMozo(Mozo mozo) throws MozoRepetidoException {
+
+		assert mozo != null : "El mozo debe ser distinto de null";
+
 		for (Mozo mozoAct : this.mozos) {
 			if (mozoAct.getNya().equals(mozo.getNya()))
 				throw new MozoRepetidoException(
@@ -377,16 +393,17 @@ public class Cerveceria {
 	 * productos.<br>
 	 *
 	 * @param producto : producto que se desea agregar a la cerveceria.
-	 * @throws ProductoRepetidoException : Se lanza si ya hay un producto registrado con el mismo nombre.
+	 * @throws ProductoRepetidoException : Se lanza si ya hay un producto registrado
+	 *                                   con el mismo nombre.
 	 */
 	public void addProducto(Producto producto) throws ProductoRepetidoException {
-		
-		assert producto!=null:"El producto debe ser distinto de null";
-		
+
+		assert producto != null : "El producto debe ser distinto de null";
+
 		for (Producto prodAct : this.productos) {
 			if (prodAct.getNombre().equals(producto.getNombre()))
-				throw new ProductoRepetidoException(
-						"No se pudo registrar el producto " + producto.getNombre() + ". Nombre y apellido del mozo repetido.");
+				throw new ProductoRepetidoException("No se pudo registrar el producto " + producto.getNombre()
+						+ ". Nombre y apellido del mozo repetido.");
 		}
 
 		this.productos.add(producto);
@@ -399,17 +416,18 @@ public class Cerveceria {
 	 * mesas.<br>
 	 *
 	 * @param mesa : mesa que se desea agregar a la cerveceria.
-	 * @throws MesaRepetidaException : Se lanza si ya hay una mesa registrada con el mismo nroMesa.
+	 * @throws MesaRepetidaException : Se lanza si ya hay una mesa registrada con el
+	 *                               mismo nroMesa.
 	 */
-	
+
 	public void addMesa(Mesa mesa) throws MesaRepetidaException {
-		
-		assert mesa!=null:"La mesa debe ser distinto de null";
-		
+
+		assert mesa != null : "La mesa debe ser distinto de null";
+
 		for (Mesa mesaAct : this.mesas) {
 			if (mesaAct.getNroMesa() == mesa.getNroMesa())
-				throw new MesaRepetidaException(
-						"No se pudo registrar la mesa " + mesa.getNroMesa() + ". Ya existe una mesa con el mismo numero.");
+				throw new MesaRepetidaException("No se pudo registrar la mesa " + mesa.getNroMesa()
+						+ ". Ya existe una mesa con el mismo numero.");
 		}
 
 		this.mesas.add(mesa);
@@ -428,27 +446,32 @@ public class Cerveceria {
 	}
 
 	/**
-	 * Agrega una promo producto a la lista de promociones de producto de la cerveceria <br>
+	 * Agrega una promo producto a la lista de promociones de producto de la
+	 * cerveceria <br>
 	 * <b>Pre:</b> promo != null<br>
-
-	 * @param promo: promocion de Producto que se desea agregar al ArrayList de promociones de producto de la cerveceria.
-	 * @throws PromoRepetidaException : Se lanza si la promocion de producto ya existe en el ArrayList de promoProductos.
-	 * * @throws ProductoInexistenteException : Se lanza si la quiere agregar una promoProducto de un producto que no existe en la cerveceria.
+	 * 
+	 * @param promo: promocion de Producto que se desea agregar al ArrayList de
+	 *               promociones de producto de la cerveceria.
+	 * @throws PromoRepetidaException : Se lanza si la promocion de producto ya
+	 *                                existe en el ArrayList de promoProductos.
+	 *                                * @throws ProductoInexistenteException : Se
+	 *                                lanza si la quiere agregar una promoProducto
+	 *                                de un producto que no existe en la cerveceria.
 	 */
-	public void addPromoProd(PromoProducto promo) throws PromoRepetidaException,ProductoInexistenteException {
-		
-		assert promo!=null:"la promo debe ser distinto de null";
-		
+	public void addPromoProd(PromoProducto promo) throws PromoRepetidaException, ProductoInexistenteException {
+
+		assert promo != null : "la promo debe ser distinto de null";
+
 		if (!this.productos.contains(promo.getProducto()))
-			throw new ProductoInexistenteException("El producto"+promo.getProducto().getNombre()+" no existe en la cerveceria");
-		
-		else { //verifico si ya existe la misma promo
+			throw new ProductoInexistenteException(
+					"El producto" + promo.getProducto().getNombre() + " no existe en la cerveceria");
+
+		else { // verifico si ya existe la misma promo
 			if (this.promosProducto.contains(promo))
-			throw new PromoRepetidaException("La promo de "+promo.getProducto().getNombre()+" ya existe en el sistema con los mismos valores");
+				throw new PromoRepetidaException("La promo de " + promo.getProducto().getNombre()
+						+ " ya existe en el sistema con los mismos valores");
 		}
-			
-		
-		
+
 		this.promosProducto.add(promo);
 	}
 
@@ -466,10 +489,11 @@ public class Cerveceria {
 		this.productos.remove(prod);
 	}
 
-	public void deleteMesa(Mesa mesa) throws ComandaAbiertaException{
-		
+	public void deleteMesa(Mesa mesa) throws ComandaAbiertaException {
+
 		if (mesa.estado.equalsIgnoreCase("OCUPADA"))
-			throw new ComandaAbiertaException("La mesa " + mesa.getNroMesa()+ " no se puede eliminar ya que tiene una comanda abierta");
+			throw new ComandaAbiertaException(
+					"La mesa " + mesa.getNroMesa() + " no se puede eliminar ya que tiene una comanda abierta");
 		this.mesas.remove(mesa);
 	}
 
@@ -588,5 +612,28 @@ public class Cerveceria {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public void cerrarJornada() throws ComandaAbiertaException {
+		if (!this.comandasAbiertas.isEmpty())
+			throw new ComandaAbiertaException("No se puede cerrar la jornada si hay mesas sin cerrar");
+		else {
+			for (Mesa mesa : this.mesas)
+				mesa.setAsignado(false);
+			for (Mozo mozo : this.mozos)
+				mozo.getMesas().clear();
+			// cambia el estado?
+
+		}
+	}
+
+	public String getEstadisticas(Mozo mozo) {
+		return "Promedio de  ventas: $" + mozo.getTotalVentas() / mozo.getCantVentas() + " ,  Total de ventas: $"
+				+ mozo.getTotalVentas() + " , Cantidad de ventas: " + mozo.getCantVentas();
+
+	}
+
+	public double getSueldo(Mozo mozo) { // arreglar
+		return sueldo + mozo.cantHijos;
 	}
 }

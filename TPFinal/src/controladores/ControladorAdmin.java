@@ -95,7 +95,7 @@ public class ControladorAdmin implements ActionListener {
 			String nombre = this.vista.getNombre();
 			double pCosto = this.vista.getPCosto();
 			double pVenta = this.vista.getPVenta();
-			double stock = this.vista.getCant();
+			int stock = this.vista.getCant();
 			Producto producto = this.vista.getSelectedProducto();
 			if (producto != null) {
 				producto.setNombre(nombre);
@@ -198,7 +198,8 @@ public class ControladorAdmin implements ActionListener {
 			ControladorAdmin.getInstance().getVista().cerrarse();
 			ControladorAdmin.getInstance().setVista(new VAdmin());
 			Sistema.getInstance().actualizarListaAdmin();
-		}
+		} else if (comando.equalsIgnoreCase("CERRAR_JORNADA"))
+			Sistema.getInstance().cerrarJornada();
 	}
 
 }
