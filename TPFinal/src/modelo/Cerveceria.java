@@ -11,16 +11,25 @@ import excepciones.MesaRepetidaException;
 import excepciones.MozoInexistenteException;
 import excepciones.MozoNoDisponibleException;
 import excepciones.MozoRepetidoException;
+import excepciones.OperarioInexistenteException;
 import excepciones.ProductoEnComandaException;
 import excepciones.ProductoInexistenteException;
 import excepciones.ProductoRepetidoException;
 import excepciones.ProductosInvalidosException;
+import excepciones.PromoInexistenteException;
 import excepciones.PromoRepetidaException;
 import excepciones.UsuarioRepetidoException;
 import persistencia.CerveceriaDTO;
 import persistencia.IPersistencia;
 import persistencia.PersistenciaBIN;
 import persistencia.UtilPersistencia;
+
+/**
+ * Clase Cerveceria <br>
+ * <b>Invariante: </b><br>
+ * - productos != null. mesas != null. comandasAbiertas!=null. 
+ * - promosTemporales != null. promosProducto !=null.
+ */
 
 public class Cerveceria {
 	private static Cerveceria instance = null;
@@ -33,7 +42,7 @@ public class Cerveceria {
 	private ArrayList<Operario> operarios = new ArrayList<Operario>();
 	private ArrayList<Comanda> comandasAbiertas = new ArrayList<Comanda>();
 	private ArrayList<Venta> ventas = new ArrayList<Venta>();
-	private ArrayList<PromoTemporal> promoTemporales = new ArrayList<PromoTemporal>();
+	private ArrayList<PromoTemporal> promosTemporales = new ArrayList<PromoTemporal>();
 	private ArrayList<PromoProducto> promosProducto = new ArrayList<PromoProducto>();
 
 	private Cerveceria() {
@@ -47,16 +56,16 @@ public class Cerveceria {
 	}
 
 	/**
-	 * Modifica el estado del mozo pasado por par�metro (por el estado e).<br>
+	 * Modifica el estado del mozo pasado por parametro (por el estado e).<br>
 	 * <b>Pre:</b> mozo != null. e != null y debe ser ACTIVO, FRANCO o AUSENTE.<br>
-	 * <b>Post:</b> El mozo pasado por par�metro tendr� como nuevo estado el pasado
-	 * por par�metro.<br>
+	 * <b>Post:</b> El mozo pasado por parametro tendra como nuevo estado el pasado
+	 * por parametro.<br>
 	 *
 	 * @param mozo : mozo al cual se quiere cambiar su estado.
-	 * @param e    : nuevo estado que se le asignar� al mozo.
-	 * @throws MozoInexsitenteException : Se lanza si el mozo pasado por par�metro
+	 * @param e    : nuevo estado que se le asignara al mozo.
+	 * @throws MozoInexsitenteException : Se lanza si el mozo pasado por parametro
 	 *                                  no existe en el ArrayList de mozos de la
-	 *                                  cervecer�a.
+	 *                                  cerveceria.
 	 * 
 	 */
 
@@ -136,6 +145,8 @@ public class Cerveceria {
 	public void reiniciarMozos() {
 		for (Mozo mozoAct : this.mozos)
 			mozoAct.reinicio();
+		
+		this.invariante();
 	}
 
 	public void cerrarMesa(Mesa mesa, String formaPago) {
@@ -153,7 +164,7 @@ public class Cerveceria {
 			/*
 			 * Busca si hay una promo temporal activa
 			 */
-			Iterator<PromoTemporal> iteratorPromoTemp = this.promoTemporales.iterator();
+			Iterator<PromoTemporal> iteratorPromoTemp = this.promosTemporales.iterator();
 			while (iteratorPromoTemp.hasNext() && !temporal) {
 				promoTemp = (PromoTemporal) iteratorPromoTemp.next();
 				if (promoTemp.getDiasDePromo().contains(Util.intToDia(comandaAct.getFecha().getDay()))
@@ -208,6 +219,8 @@ public class Cerveceria {
 
 		} else
 			System.out.println("LA MESA NO TIENE COMANDAS ABIERTAS");
+		
+		this.invariante();
 
 	}
 
@@ -224,16 +237,16 @@ public class Cerveceria {
 	}
 
 	/**
-	 * Retorna el precio con descuento del pedido pasado por par�metro considerando
+	 * Retorna el precio con descuento del pedido pasado por parametro considerando
 	 * la promo del producto del producto de ese pedido (y la cantidad pedida)<br>
 	 * <b>Pre:pedido != null. promoProducto !=null y promoProducto debe estar
-	 * ACTIVA. Adem�s debe coincidir el d�a de promoci�n de promoProducto con el del
+	 * ACTIVA. Ademas debe coincidir el dia de promocion de promoProducto con el del
 	 * producto del pedido.</b> <br>
-	 * <b>Post:</b> Devolver� el precio con Descuento del pedido considerando el
+	 * <b>Post:</b> Devolvera el precio con Descuento del pedido considerando el
 	 * producto, la cantidad y el descuento que se le aplica.<br>
 	 * 
-	 * @param pedido        : pedido al cual se le aplicar� la promoci�n.
-	 * @param promoProducto : promoci�n del producto que se le aplicar� al pedido.
+	 * @param pedido        : pedido al cual se le aplicara la promocion.
+	 * @param promoProducto : promocion del producto que se le aplicara al pedido.
 	 * 
 	 */
 
@@ -264,7 +277,7 @@ public class Cerveceria {
 
 	/**
 	 * Toma una nueva comanda en caso de que la mesa este libre. Si la mesa pasada
-	 * por par�metro est� ocupada, se agregan los pedidos al ArrayList de pedidos de
+	 * por parametro esta ocupada, se agregan los pedidos al ArrayList de pedidos de
 	 * la comanda abierta de esa mesa.<br>
 	 * <b>Pre:</b> mozo != null. mesa != null<br>
 	 * <b>Post:</b> La mesa se agrega al ArrayList de mesas del mozo. El estado de
@@ -304,6 +317,8 @@ public class Cerveceria {
 				addComanda(new Comanda(mesa, pedidosValidos));
 		} else
 			throw new MesaInexistenteException("la mesa elegida no existe");
+		
+		this.invariante();
 
 	}
 
@@ -341,11 +356,9 @@ public class Cerveceria {
 						"No se pudo registrar al operario " + op.getUsername() + ". Nombre de usuario repetido.");
 		}
 		this.operarios.add(op);
+		this.invariante();
 	}
 
-	public void invariante() {
-
-	}
 
 	// Metodos necesarios para el LOGIN
 
@@ -384,6 +397,7 @@ public class Cerveceria {
 		}
 
 		this.mozos.add(mozo);
+		this.invariante();
 	}
 
 	/**
@@ -407,6 +421,7 @@ public class Cerveceria {
 		}
 
 		this.productos.add(producto);
+		this.invariante();
 	}
 
 	/**
@@ -431,82 +446,170 @@ public class Cerveceria {
 		}
 
 		this.mesas.add(mesa);
+		this.invariante();
 	}
 
-	public void addComanda(Comanda comanda) {
-		this.comandasAbiertas.add(comanda);
-	}
-
-	public void addVenta(Venta venta) {
-		this.ventas.add(venta);
-	}
-
-	public void addPromoTemp(PromoTemporal promo) {
-		this.promoTemporales.add(promo);
-	}
 
 	/**
 	 * Agrega una promo producto a la lista de promociones de producto de la
 	 * cerveceria <br>
 	 * <b>Pre:</b> promo != null<br>
-	 * 
+	 * <b>Post:</b> La promo pasada por parametro se agrega al ArrayList de
+	 * promos de producto.<br>
 	 * @param promo: promocion de Producto que se desea agregar al ArrayList de
 	 *               promociones de producto de la cerveceria.
-	 * @throws PromoRepetidaException : Se lanza si la promocion de producto ya
-	 *                                existe en el ArrayList de promoProductos.
-	 *                                * @throws ProductoInexistenteException : Se
-	 *                                lanza si la quiere agregar una promoProducto
-	 *                                de un producto que no existe en la cerveceria.
+	 * @throws PromoRepetidaException : Se lanza si ya existe una promocion para ese producto con los mismos valores.
+	 *@throws ProductoInexistenteException : Se lanza si la quiere agregar una promoProducto de un producto que no existe en la cerveceria.
 	 */
 	public void addPromoProd(PromoProducto promo) throws PromoRepetidaException, ProductoInexistenteException {
 
 		assert promo != null : "la promo debe ser distinto de null";
 
-		if (!this.productos.contains(promo.getProducto()))
-			throw new ProductoInexistenteException(
-					"El producto" + promo.getProducto().getNombre() + " no existe en la cerveceria");
+		int j=0;
+		
+		 while (j < productos.size() && !productos.get(j).equals(promo.getProducto().getNombre()))
+	            j++;
+		 
+		 if (j >= productos.size())
+			 throw new ProductoInexistenteException(
+						"El producto" + promo.getProducto().getNombre() + " no existe en la cerveceria");	
 
 		else { // verifico si ya existe la misma promo
-			if (this.promosProducto.contains(promo))
-				throw new PromoRepetidaException("La promo de " + promo.getProducto().getNombre()
-						+ " ya existe en el sistema con los mismos valores");
+			
+			int i=0;
+			 while (i < promosProducto.size() && !promosProducto.get(i).equals(promo))
+		            i++;
+			 
+			 if (i < promosProducto.size() && promosProducto.get(i).equals(promo)) { //si ya existe la misma promo
+					throw new PromoRepetidaException("La promo de " + promo.getProducto().getNombre()
+							+ " ya existe en el sistema con los mismos valores");
+			 }
 		}
 
 		this.promosProducto.add(promo);
+		this.invariante();
+	}
+	
+	/**
+	 * Agrega una promo temporal a la lista de promociones temporales de la
+	 * cerveceria <br>
+	 * <b>Pre:</b> promo != null<br>
+	 * <b>Post:</b> La promocion pasada por parametro se agrega al ArrayList de promos temporales
+	 * .<br>
+	 * @param promo: promocion temporal que se desea agregar al ArrayList de promociones temporales de la cerveceria.
+	 * @throws PromoRepetidaException : Se lanza si ya existe una promoTemporal con el mismo nombre.
+
+	 */
+	
+	public void addPromoTemp(PromoTemporal promo) throws PromoRepetidaException {
+		
+		int i=0;
+		while (i<this.promosTemporales.size() && !this.promosTemporales.get(i).getNombre().equalsIgnoreCase(promo.getNombre()))
+			i++;
+		
+		if (i>=this.promosTemporales.size())
+			throw new PromoRepetidaException("Ya existe una promo temporal con el mismo nombre ("+promo.getNombre()+")");
+		else
+			this.promosTemporales.add(promo);
+		
+		this.invariante();
+	}
+	
+	public void addComanda(Comanda comanda) {
+		this.comandasAbiertas.add(comanda);
+		this.invariante();
 	}
 
-	public void deleteOperario(Operario op) {
+	public void addVenta(Venta venta) {
+		this.ventas.add(venta);
+		this.invariante();
+	}
+	
+	
+	public void deleteOperario(Operario op) throws OperarioInexistenteException {
+		
+        assert op != null : "El operario no puede ser null";
+
+        if (this.operarios.contains(op))
+            operarios.remove(op);
+        else
+            throw new OperarioInexistenteException("El operario que se quiere eliminar no existe");
+   
 		this.operarios.remove(op);
+		this.invariante();
 	}
 
-	public void deleteMozo(Mozo mozo) {
-		this.mozos.remove(mozo);
+	public void deleteMozo(Mozo mozo)throws MozoInexistenteException {
+		
+        assert mozo != null : "El mozo no puede ser null";
+
+        if (mozos.contains(mozo))
+            mozos.remove(mozo);
+        else
+            throw new MozoInexistenteException("El mozo que se quiere eliminar no existe");
+        
+        this.invariante();
+    }
+	
+
+	public void deleteProducto(Producto prod) throws ProductoEnComandaException,ProductoInexistenteException {
+		
+		if (this.productos.contains(prod)) {
+			if (prod.EnComanda())
+				throw new ProductoEnComandaException("El producto no se puede eliminar ya que es parte de una comanda");
+			else
+				this.productos.remove(prod);
+		}
+		else
+			throw new ProductoInexistenteException("El producto que se quiere eliminar no existe");
+			
+		this.invariante();
 	}
 
-	public void deleteProducto(Producto prod) throws ProductoEnComandaException {
-		if (this.productos.contains(prod))
-			throw new ProductoEnComandaException("El producto no se puede eliminar ya que es parte de una comanda");
-		this.productos.remove(prod);
+	public void deleteMesa(Mesa mesa) throws ComandaAbiertaException, MesaInexistenteException {
+
+		if (this.mesas.contains(mesa)) {
+			if (mesa.estado.equalsIgnoreCase("OCUPADA"))
+				throw new ComandaAbiertaException(
+						"La mesa " + mesa.getNroMesa() + " no se puede eliminar ya que tiene una comanda abierta");
+			else
+				this.mesas.remove(mesa);
+		}
+		else
+			throw new MesaInexistenteException("La mesa que se quiere eliminar no existe");
+		
+		this.invariante();
 	}
 
-	public void deleteMesa(Mesa mesa) throws ComandaAbiertaException {
-
-		if (mesa.estado.equalsIgnoreCase("OCUPADA"))
-			throw new ComandaAbiertaException(
-					"La mesa " + mesa.getNroMesa() + " no se puede eliminar ya que tiene una comanda abierta");
-		this.mesas.remove(mesa);
-	}
-
+	
 	public void deleteComanda(Comanda comanda) {
 		this.comandasAbiertas.remove(comanda);
+		this.invariante();
 	}
 
-	public void deletePromoTemporal(PromoTemporal promo) {
-		this.promoTemporales.remove(promo);
+	public void deletePromoTemporal(PromoTemporal promo) throws PromoInexistenteException {
+		
+		assert promo != null : "La promo no puede ser null";
+		
+		if (promosTemporales.contains(promo))
+			promosTemporales.remove(promo);
+	    else
+	    	throw new PromoInexistenteException("La promo que se quiere eliminar no existe");
+
+	    this.invariante();
 	}
 
-	public void deletePromoProducto(PromoProducto promo) {
-		this.promosProducto.remove(promo);
+	
+	public void deletePromoProducto(PromoProducto promo) throws PromoInexistenteException {
+		
+		assert promo != null : "La promo no puede ser null";
+		
+		if (promosProducto.contains(promo))
+			this.promosProducto.remove(promo);
+	    else
+	    	throw new PromoInexistenteException("La promo que se quiere eliminar no existe");
+
+	    this.invariante();
 	}
 
 	// getters
@@ -548,7 +651,7 @@ public class Cerveceria {
 	}
 
 	public ArrayList<PromoTemporal> getPromoTemporales() {
-		return promoTemporales;
+		return promosTemporales;
 	}
 
 	public ArrayList<PromoProducto> getPromosProducto() {
@@ -557,48 +660,83 @@ public class Cerveceria {
 
 	public void setNombreLocal(String nombreLocal) {
 		this.nombreLocal = nombreLocal;
+		this.invariante();
 	}
 
 	public void setSueldo(double sueldo) {
 		this.sueldo = sueldo;
+		this.invariante();
 	}
 
 	public void setMozos(ArrayList<Mozo> mozos) {
 		this.mozos = mozos;
+		this.invariante();
 	}
 
 	public void setAdmin(Admin admin) {
 		this.admin = admin;
+		this.invariante();
 	}
 
 	public void setMesas(ArrayList<Mesa> mesas) {
 		this.mesas = mesas;
+		this.invariante();
 	}
 
 	public void setProductos(ArrayList<Producto> productos) {
 		this.productos = productos;
+		this.invariante();
 	}
 
 	public void setOperarios(ArrayList<Operario> operarios) {
 		this.operarios = operarios;
+		this.invariante();
 	}
 
 	public void setComandasAbiertas(ArrayList<Comanda> comandasAbiertas) {
 		this.comandasAbiertas = comandasAbiertas;
+		this.invariante();
 	}
 
 	public void setVentas(ArrayList<Venta> ventas) {
 		this.ventas = ventas;
+		this.invariante();
 	}
 
 	public void setPromoTemporales(ArrayList<PromoTemporal> promoTemporales) {
-		this.promoTemporales = promoTemporales;
+		this.promosTemporales = promoTemporales;
+		this.invariante();
 	}
 
 	public void setPromosProducto(ArrayList<PromoProducto> promosProducto) {
 		this.promosProducto = promosProducto;
+		this.invariante();
 	}
 
+	 public String mozoMayorVentas() {
+	        double maxVenta = -1;
+	        String mozoMaxVenta = null;
+	        for (Mozo mozo : mozos) {
+	            if (mozo.getTotalVentas() > maxVenta) {
+	                maxVenta = mozo.getTotalVentas();
+	                mozoMaxVenta = mozo.getNya();
+	            }
+	        }
+	        return mozoMaxVenta;
+	    }
+
+	    public String mozoMenorVentas() {
+	        double minVenta = 999999999;
+	        String mozoMinVenta = null;
+	        for (Mozo mozo : mozos) {
+	            if (mozo.getTotalVentas() < minVenta) {
+	                minVenta = mozo.getTotalVentas();
+	                mozoMinVenta = mozo.getNya();
+	            }
+	        }
+	        return mozoMinVenta;
+	    }
+	    
 	public void persistir() {
 		try {
 			IPersistencia<Serializable> persistencia = new PersistenciaBIN();
@@ -627,6 +765,14 @@ public class Cerveceria {
 		}
 	}
 
+	private void invariante() {
+		assert this.promosProducto != null : "La lista de promociones de producto no puede ser null";
+		assert this.promosTemporales != null : "La lista de promociones temporales no puede ser null";
+		assert this.productos != null : "La lista de productos no puede ser null";
+		assert this.comandasAbiertas != null : "La lista de comandas abiertas no puede ser null";
+		assert this.mesas != null : "La lista de mesas no puede ser null";
+	}
+	
 	public String getEstadisticas(Mozo mozo) {
 		return "Promedio de  ventas: $" + mozo.getTotalVentas() / mozo.getCantVentas() + " ,  Total de ventas: $"
 				+ mozo.getTotalVentas() + " , Cantidad de ventas: " + mozo.getCantVentas();

@@ -133,7 +133,7 @@ public class Sistema {
 				actualizarListaAdmin();
 				persistir();
 			} catch (UsuarioRepetidoException e) {
-				ControladorAdmin.getInstance().getVista().notificar("Operario ya existente");
+				ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
 			}
 
 		} else

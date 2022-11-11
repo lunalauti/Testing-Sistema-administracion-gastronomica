@@ -16,7 +16,8 @@ public class Producto implements Serializable {
 	public double pCosto;
 	public double pVenta;
 	public int stock;
-
+	public boolean enComanda; //cuando se agrega una vez a una comanda pasa a True y permanece en este estado.
+							  //cuando se instancia un producto, inicia en false.
 	/**
 	 * Crea una nueva instancia de un Producto. <br>
 	 * <b>Pre:</b> nombre debe ser distinto de null y vacio.<br>
@@ -37,6 +38,7 @@ public class Producto implements Serializable {
 		this.pCosto = pCosto;
 		this.pVenta = pVenta;
 		this.stock = stock;
+		this.enComanda=false;
 		this.invariante(); // verifica las condiciones establecidas en la precondicion del metodo
 		this.id_producto = incremental++;
 
@@ -90,6 +92,9 @@ public class Producto implements Serializable {
 
 	public double getStock() {
 		return stock;
+	}
+	public boolean EnComanda() {
+		return enComanda;
 	}
 
 	public void invariante() {

@@ -117,6 +117,15 @@ public class PromoProducto extends Promocion {
 		assert this.producto!=null:"el producto debe ser distinto de null";
 	}
 	
+	//Equals redefinido
+	//Se toma que 2 promos Producto son iguales: si se aplican los mismos descuentos y los mismos valores para estos (independientemente de los dias que se apliquen y si estan activas o no)
+	public boolean equals(PromoProducto pp) {
+		
+		if (this.aplicaDosPorUno==pp.aplicaDosPorUno && this.aplicaDtoPorCantidad==pp.aplicaDtoPorCantidad && this.dtoPorCantidad_CantMinima==pp.dtoPorCantidad_CantMinima && this.dtoPorCantidad_PrecioUnit==pp.dtoPorCantidad_CantMinima)
+			return true;
+		else
+			return false;
+	}
 	@Override
 	public String toString() {
 		return "producto=" + producto + ", aplicaDosPorUno=" + aplicaDosPorUno + ", aplicaDtoPorCantidad="

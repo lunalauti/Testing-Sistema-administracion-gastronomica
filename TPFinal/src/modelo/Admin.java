@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import excepciones.ComandaAbiertaException;
+import excepciones.MesaInexistenteException;
 import excepciones.MesaRepetidaException;
+import excepciones.MozoInexistenteException;
 import excepciones.MozoRepetidoException;
+import excepciones.OperarioInexistenteException;
 import excepciones.ProductoEnComandaException;
 import excepciones.ProductoInexistenteException;
 import excepciones.ProductoRepetidoException;
+import excepciones.PromoInexistenteException;
 import excepciones.PromoRepetidaException;
 import excepciones.UsuarioRepetidoException;
 
@@ -79,8 +83,7 @@ public class Admin extends Operario {
 		assert nya != null : "el nombre y apellido debe ser distinto de null";
 
 		Operario op = new Operario(nya, username, password);
-		Cerveceria.getInstance().addOperario(op); // la cerveceria verifica si ya existe. Si ya existe el op -> se
-													// propaga la excepcion
+		Cerveceria.getInstance().addOperario(op); 
 
 	}
 
@@ -155,7 +158,7 @@ public class Admin extends Operario {
 	}
 
 	/**
-	 * Agrega una promo producto a la lista de promociones de producto de la
+	 * Instancia y agrega una promo producto a la lista de promociones de producto de la
 	 * cerveceria con los datos pasados por parametro<br>
 	 * <b>Pre:</b> diasDePromo debe ser distinto de null y no debe estar vacio.<br>
 	 * dtoPorCantidad_CantMinima y dtoPorCantidad_PrecioUnit deben ser mayor a 0<br>
@@ -169,7 +172,7 @@ public class Admin extends Operario {
 	 *
 	 * @param diasDePromo: ArrayList con los dias que se aplicara la promo producto.
 	 * @param producto     : producto que tendra la promocion.
-	 * @throws PromoException : Se lanza si la mesa ya existe en el ArrayList de
+	 * @throws PromoRepetidaException : Se lanza si la mesa ya existe en el ArrayList de
 	 *                        mesas.
 	 */
 
@@ -191,31 +194,70 @@ public class Admin extends Operario {
 		Cerveceria.getInstance().addPromoProd(promoProd);
 	}
 
-	public void addPromoTemporal(PromoTemporal promocion) {
-		Cerveceria.getInstance().addPromoTemp(promocion);
+	
+	/**
+	 * Instancia y agrega una promo temporal a la lista de promociones temporales de la
+	 * cerveceria con los datos pasados por parametro.<br>
+	 * <b>Pre:</b> dias debe ser distinto de null y no debe estar vacio.<br>
+	 * nombre !=null y distinto de vacio.<br>
+	 * formaPagodebe ser: efectivo, tarjeta, mercPago o ctaDNI.<br>
+	 * porcentajeDesc debe ser mayor que <br>
+	 * <b>Post:</b> La promo Temporal se instancia y se agrega al ArrayList de
+	 * promociones de PromosTemporales de la cerveceria.<br>
+	 *
+	 * @param dias: ArrayList con los dias que se aplicara la promo producto.
+	 * @param nombre     : nombre de la promocion
+	 * @param formaPago: Determina bajo que medio de pago se aplicara la promocion
+	 * @param porcentaje: Establece el descuento que se le hace al total de la compra
+	 * @param acumulable: Determina si la promocion puede aplicarse si hay otras promociones aplicadas
+	 * @throws PromoException : Se lanza si la mesa ya existe en el ArrayList de
+	 *                        mesas.
+	 */
+	public void addPromoTemporal(ArrayList<String> dias, String nombre, String formaPago, int porcentaje, boolean acumulable) throws PromoRepetidaException{
+		
+		assert dias != null && dias.size() > 0
+				: "diasDePromo debe ser distinto de null y contener al menos 1 elemento";
+		assert nombre!=null && !nombre.equals(""):"el nombre debe ser distinto de null y string vacio";
+		assert formaPago!=null && !formaPago.equals(""):"el nombre debe ser distinto de null y string vacio";
+		assert formaPago.equalsIgnoreCase("efectivo") || formaPago.equalsIgnoreCase("tarjeta") ||
+		formaPago.equalsIgnoreCase("mercPago") || formaPago.equalsIgnoreCase("ctaDNI"):"El medio de pago debe ser: efectivo, tarjeta, mercPago o ctaDNI";
+		assert porcentaje > 0: "procentajeDesc debe ser mayor que 0";
+		
+		PromoTemporal promoTemp = new PromoTemporal(dias,nombre,formaPago,porcentaje,acumulable);
+		Cerveceria.getInstance().addPromoTemp(promoTemp);
 	}
+	
 
-	public void deleteMozo(Mozo mozo) {
+	public void deleteMozo(Mozo mozo) throws MozoInexistenteException {
+		assert mozo!=null:"el mozo debe ser != null";
 		Cerveceria.getInstance().deleteMozo(mozo);
 	}
 
-	public void deleteMesa(Mesa mesa) throws ComandaAbiertaException {
+	//no se puede eliminar una mesa que tenga una comanda abierta asociada.
+	
+	public void deleteMesa(Mesa mesa) throws ComandaAbiertaException,MesaInexistenteException {
+		assert mesa!=null:"la mesa debe ser !=null";
 		Cerveceria.getInstance().deleteMesa(mesa);
 	}
 
-	public void deleteProducto(Producto producto) throws ProductoEnComandaException {
+	//no se puede eliminar un producto si es/fue parte de una comanda.
+	public void deleteProducto(Producto producto) throws ProductoEnComandaException,ProductoInexistenteException {
+		assert producto!=null: "el producto debe ser !=null";
 		Cerveceria.getInstance().deleteProducto(producto);
 	}
 
-	public void deleteOperario(Operario operario) {
+	public void deleteOperario(Operario operario) throws OperarioInexistenteException {
+		assert operario!=null: "el operario debe ser !=null";
 		Cerveceria.getInstance().deleteOperario(operario);
 	}
 
-	public void deletePromoTemporal(PromoTemporal promo) {
+	public void deletePromoTemporal(PromoTemporal promo) throws PromoInexistenteException{
+		assert promo!=null: "la promo debe ser !=null";
 		Cerveceria.getInstance().deletePromoTemporal(promo);
 	}
 
-	public void deletePromoProducto(PromoProducto promo) {
+	public void deletePromoProducto(PromoProducto promo) throws PromoInexistenteException{
+		assert promo!=null: "la promo debe ser !=null";
 		Cerveceria.getInstance().deletePromoProducto(promo);
 	}
 }
