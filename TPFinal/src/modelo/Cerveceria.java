@@ -8,6 +8,7 @@ import excepciones.ComandaAbiertaException;
 import excepciones.MesaInexistenteException;
 import excepciones.MesaNoDisponibleException;
 import excepciones.MesaRepetidaException;
+import excepciones.MesaSinComandaException;
 import excepciones.MozoInexistenteException;
 import excepciones.MozoNoDisponibleException;
 import excepciones.MozoRepetidoException;
@@ -111,18 +112,18 @@ public class Cerveceria {
 
 		if (i < mozos.size() && mozo.equals(mozos.get(i))) { // existe el mozo
 
-			if (mozo.getEstado() == Estado.ACTIVO) { // el mozo est� disponible
+			if (mozo.getEstado() == Estado.ACTIVO) { // el mozo esta disponible
 				i = 0;
 
-				while (i < mesas.size() && !mesa.equals(mesas.get(i)))
+				while (i < mesas.size() && mesa.getNroMesa()!=mesas.get(i).getNroMesa())
 					i++;
 
-				if (i < mesas.size() && mesa.equals(mesas.get(i))) { // la mesa existe
+				if (i < mesas.size() && mesa.getNroMesa()==mesas.get(i).getNroMesa()) { // la mesa existe
 
-					if (mesa.getEstado().equalsIgnoreCase("LIBRE")) { // el mozo y la mesa est�n disponibles
+					if (mesa.getEstado().equalsIgnoreCase("LIBRE")) { // el mozo y la mesa estan disponibles
 						mozo.addMesa(mesa);
 						mesa.setAsignado(true);
-						mesa.setEstado("OCUPADA");
+						//mesa.setEstado("OCUPADA");
 					} else
 						throw new MesaNoDisponibleException("La mesa " + mesa.getNroMesa() + " no esta disponible");
 				} else
@@ -149,7 +150,7 @@ public class Cerveceria {
 		this.invariante();
 	}
 
-	public void cerrarMesa(Mesa mesa, String formaPago) {
+	public void cerrarMesa(Mesa mesa, String formaPago) throws MesaSinComandaException {
 		int pos;
 		boolean temporal = false, enc;
 		ArrayList<Promocion> listaPromos = new ArrayList<Promocion>();
@@ -218,7 +219,8 @@ public class Cerveceria {
 			this.comandasAbiertas.remove(pos);
 
 		} else
-			System.out.println("LA MESA NO TIENE COMANDAS ABIERTAS");
+			throw new MesaSinComandaException("No se puede cerrar la mesa ya que no tiene una comanda abierta asociada");
+
 		
 		this.invariante();
 
@@ -288,17 +290,18 @@ public class Cerveceria {
 	 */
 
 	public void tomarComanda(Mesa mesa, ArrayList<Pedido> pedidos)
-			throws MesaInexistenteException, ProductosInvalidosException {
+			throws MesaInexistenteException, MesaNoDisponibleException,ProductosInvalidosException {
 
 		int i = 0;
 		ArrayList<Pedido> pedidosValidos = new ArrayList<Pedido>();
-		;
 
 		while (i < mesas.size() && !mesa.equals(mesas.get(i)))
 			i++;
 
 		if (i < mesas.size() && mesa.equals(mesas.get(i))) { // la mesa existe
-
+			
+			if (!mesa.asignado)
+				throw new MesaNoDisponibleException("No se puede tomar comanda: la mesa no tiene mozo asignado");
 			// verifico que al menos 1 producto de los pedidos del ArrayList exista (en el
 			// ArrayList de Productos)
 			for (Pedido pedido : pedidos) {
@@ -306,15 +309,18 @@ public class Cerveceria {
 					pedidosValidos.add(pedido);
 				}
 			}
-			if (pedidosValidos.size() <= 0) // No se pidi� ning�n producto v�lido
-				throw new ProductosInvalidosException("No se pidi� ning�n producto v�lido");
+			if (pedidosValidos.size() <= 0) // No se pidio ningun producto valido
+				throw new ProductosInvalidosException("No se pidio ningun producto valido");
 
 			int pos = getComanda(mesa);
 
 			if (pos != -1) // la mesa ya tiene una comanda abierta
 				agregarPedido(this.comandasAbiertas.get(pos), pedidosValidos);
-			else // la mesa esta libre
+			else{ // la mesa esta libre
+
 				addComanda(new Comanda(mesa, pedidosValidos));
+				mesa.setEstado("OCUPADA");
+			}
 		} else
 			throw new MesaInexistenteException("la mesa elegida no existe");
 		
@@ -415,7 +421,7 @@ public class Cerveceria {
 		assert producto != null : "El producto debe ser distinto de null";
 
 		for (Producto prodAct : this.productos) {
-			if (prodAct.getNombre().equals(producto.getNombre()))
+			if (prodAct.getNombre().equalsIgnoreCase(producto.getNombre()))
 				throw new ProductoRepetidoException("No se pudo registrar el producto " + producto.getNombre()
 						+ ". Nombre y apellido del mozo repetido.");
 		}
@@ -467,12 +473,12 @@ public class Cerveceria {
 
 		int j=0;
 		
-		 while (j < productos.size() && !productos.get(j).equals(promo.getProducto().getNombre()))
+		 while (j < productos.size() && !productos.get(j).getNombre().equalsIgnoreCase(promo.getProducto().getNombre()))
 	            j++;
 		 
 		 if (j >= productos.size())
 			 throw new ProductoInexistenteException(
-						"El producto" + promo.getProducto().getNombre() + " no existe en la cerveceria");	
+						"El producto " + promo.getProducto().getNombre() + " no existe en la cerveceria");	
 
 		else { // verifico si ya existe la misma promo
 			
@@ -507,7 +513,7 @@ public class Cerveceria {
 		while (i<this.promosTemporales.size() && !this.promosTemporales.get(i).getNombre().equalsIgnoreCase(promo.getNombre()))
 			i++;
 		
-		if (i>=this.promosTemporales.size())
+		if (i>0 && i>=this.promosTemporales.size()) //verifico i>0 para que no se lance la excepcion al agregar la primera promoTemporal
 			throw new PromoRepetidaException("Ya existe una promo temporal con el mismo nombre ("+promo.getNombre()+")");
 		else
 			this.promosTemporales.add(promo);
@@ -737,6 +743,11 @@ public class Cerveceria {
 	        return mozoMinVenta;
 	    }
 	    
+	public String getInformeMozos() {
+		return "Mozo con mayores ventas: " + mozoMayorVentas()+ ".  Mozo con menores ventas: "
+				+ mozoMenorVentas();
+	}
+	    
 	public void persistir() {
 		try {
 			IPersistencia<Serializable> persistencia = new PersistenciaBIN();
@@ -774,7 +785,14 @@ public class Cerveceria {
 	}
 	
 	public String getEstadisticas(Mozo mozo) {
-		return "Promedio de  ventas: $" + mozo.getTotalVentas() / mozo.getCantVentas() + " ,  Total de ventas: $"
+		
+		double prom;
+		if (mozo.getCantVentas()==0)
+			prom=0;
+		else
+			prom=mozo.getTotalVentas() / mozo.getCantVentas();
+		
+		return "Promedio de  ventas: $" + prom + " ,  Total de ventas: $"
 				+ mozo.getTotalVentas() + " , Cantidad de ventas: " + mozo.getCantVentas();
 
 	}

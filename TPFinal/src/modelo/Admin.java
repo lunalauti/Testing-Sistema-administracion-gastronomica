@@ -19,7 +19,8 @@ import excepciones.UsuarioRepetidoException;
 /**
  * Clase Admin <br>
  * <b>mismo invariante que su clase padre Operario: </b><br>
- * - nya != null y distinto de vacio. - username != null y distinto de vacio. -
+ * - nya != null y distinto de vacio.
+ * username != null y distinto de vacio. -
  * password !=null y distinto de vacio.
  */
 public class Admin extends Operario {
@@ -36,29 +37,6 @@ public class Admin extends Operario {
 		super.invariante();
 	}
 
-	/**
-	 * Cambia el nombre de usuario y la contrasena del Admin <br>
-	 * <b>Pre:</b> username != null y el nuevo username debe ser diferente al
-	 * previo.<br>
-	 * password !=null y la nueva password debe ser diferente a la ultima
-	 * establecida.<br>
-	 * <b>Post:</b> El Admin tendr� un nuevo username y contrasena con los valores
-	 * pasados por parametro.<br>
-	 * 
-	 * @param username  : Nuevo nombre de usuario del Admin.
-	 * @param password: Nueva contrasena del Admin.
-	 */
-
-//    public void cambiarUserPass(String username, String password) throws PasswordYaUtilizadaException,UsernameYaUtilizadoException { //no sabia que nombre ponerle
-//        
-//    	if (super.getUsername().equals(username))
-//    		throw new UsernameYaUtilizadoException();
-//    	if (super.getPassword().equals(password))
-//    		throw new PasswordYaUtilizadaException();
-//    	
-//    	super.setUsername(username);
-//        super.setPassword(password);
-//    }
 
 	/**
 	 * Agrega un operario a la lista de operarios de la cerveceria con los datos
@@ -260,4 +238,5 @@ public class Admin extends Operario {
 		assert promo!=null: "la promo debe ser !=null";
 		Cerveceria.getInstance().deletePromoProducto(promo);
 	}
+	
 }

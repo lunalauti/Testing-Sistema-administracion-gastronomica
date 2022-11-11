@@ -12,8 +12,8 @@ public class Venta implements Serializable {
 	/**
 	 * Constructor de la clase venta.<br>
 	 * <b>Pre:</b> comanda!= null. listaPromosAplicadas debe estar inicializada.<br>
-	 * <b>Post:</b> Se instancia un objeto de la clase venta con las caracter�sticas
-	 * pasadas por par�metro..<br>
+	 * <b>Post:</b> Se instancia un objeto de la clase venta con las caracteristicas
+	 * pasadas por parametro..<br>
 	 * 
 	 * @param comanda              : Comanda de la venta.
 	 * @param total                : El total de la venta.
@@ -53,7 +53,7 @@ public class Venta implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "fecha= "+comanda.getFecha().getDay()+"/"+comanda.getFecha().getMonth()+"/"+(comanda.getFecha().getYear()+1900)+", mesa=" + comanda.getMesa() + ", total=" + total + ", formaPago=" + formaPago + ", listaPromosAplicadas="
+		return "fecha= "+comanda.getFecha().getDay()+"/"+comanda.getFecha().getMonth()+"/"+(comanda.getFecha().getYear()+1900)+", mesa=" + comanda.getMesa().getNroMesa() + ", total=" + total + ", formaPago=" + formaPago + ", listaPromosAplicadas="
 				+ getPromos();
 	}
 	

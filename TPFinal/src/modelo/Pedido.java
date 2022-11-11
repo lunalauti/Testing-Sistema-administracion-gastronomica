@@ -56,6 +56,11 @@ public class Pedido implements Serializable{
 	public Date getFecha() {
 		return fecha;
 	}
+	
+	@Override
+	public String toString() {
+		return "" +cantidad+ " "+ producto.getNombre();
+	}
 
 	public void invariante() {
 		assert producto != null : "producto debe ser diferente de null";

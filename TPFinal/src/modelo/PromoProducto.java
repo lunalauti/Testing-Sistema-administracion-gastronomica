@@ -128,9 +128,9 @@ public class PromoProducto extends Promocion {
 	}
 	@Override
 	public String toString() {
-		return "producto=" + producto + ", aplicaDosPorUno=" + aplicaDosPorUno + ", aplicaDtoPorCantidad="
+		return "producto=" + producto.getNombre() + ", aplicaDosPorUno=" + aplicaDosPorUno + ", aplicaDtoPorCantidad="
 				+ aplicaDtoPorCantidad + ", dtoPorCantidad_CantMinima=" + dtoPorCantidad_CantMinima
-				+ ", dtoPorCantidad_PrecioUnit=" + dtoPorCantidad_PrecioUnit + ", activa=" + activa;
+				+ ", dtoPorCantidad_PrecioUnit=" + dtoPorCantidad_PrecioUnit + ", activa=" + this.isActiva();
 	}
 
 }

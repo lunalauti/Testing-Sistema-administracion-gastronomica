@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * * Clase Producto del modelo <br>
  * <b>Invariante: </b><br>
- * -id_producto, pCosto y pVenta deben ser mayor a 0. PCosto < PVenta <br>
+ * -id_producto, pCosto y pVenta deben ser mayor a 0. PCosto < PVenta
  * -nombre debe ser distinto de null y vacio <br>
  * -stock debe ser mayor o igual a 0
  */

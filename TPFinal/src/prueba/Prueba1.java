@@ -31,6 +31,7 @@ public class Prueba1 {
 			System.out.println(cerveceria.getOperarios().get(0).getUsername());
 			Date fecha1 = new Date(2000, 8, 17);
 
+
 			Mesa mesa1 = new Mesa(4, 0);
 			cerveceria.addMesa(mesa1);
 			Mesa mesa2 = new Mesa(6, 1);
@@ -51,12 +52,17 @@ public class Prueba1 {
 
 			cerveceria.addMesa(new Mesa(10, 5));
 			cerveceria.addMesa(new Mesa(2, 8));
+			
 			cerveceria.addProducto(new Producto("Papas fritas", 150, 300, 20));
+			
 			cerveceria.addProducto(new Producto("Pizza", 200.50, 450, 15));
+			
 			Producto milanesa = new Producto("Milanesa", 500, 800, 10);
 			cerveceria.addProducto(milanesa);
+			
 			Producto hamburguesa = new Producto("Hamburguesa", 400, 1000, 10);
 			cerveceria.addProducto(hamburguesa);
+			
 			Producto cerveza = new Producto("cerveza", 200, 400, 50);
 			cerveceria.addProducto(cerveza);
 
@@ -75,8 +81,8 @@ public class Prueba1 {
 			// PEDIDO POSTERIOR MESA1
 			ArrayList<Pedido> pedidoPosteriormesa1 = new ArrayList<Pedido>();
 			pedidoPosteriormesa1.add(pedido3);
+			
 			// TOMO LAS COMANDAS
-
 			cerveceria.tomarComanda(mesa1, pedidoInicialmesa1);
 			System.out.println(cerveceria.getComanda(mesa1));
 
@@ -85,7 +91,7 @@ public class Prueba1 {
 
 			ArrayList<Pedido> pedidoParcialMesa1 = new ArrayList<Pedido>();
 
-			// VERIFICO QUE SE HAYA A�ADIDO BIEN EL PEDIDO NUEVO DE MILANESA A LA COMANDA
+			// VERIFICO QUE SE HAYA Agregado BIEN EL PEDIDO NUEVO DE MILANESA A LA COMANDA
 			// EXISTENTE
 			Comanda PruebaComanda = cerveceria.getComandasAbiertas().get(0);
 			pedidoParcialMesa1 = PruebaComanda.getListaProductos();
@@ -115,7 +121,6 @@ public class Prueba1 {
 
 			cerveceria.cerrarMesa(mesa1, "TARJETA");
 			System.out.println(cerveceria.getVentas().get(0).getTotal());
-
 			persistencia.abrirOutput("Cerveceria.bin");
 			System.out.println("Crea archivo escritura");
 			CerveceriaDTO cDTO = UtilPersistencia.CerveceriaToCerveceriaDTO(cerveceria);

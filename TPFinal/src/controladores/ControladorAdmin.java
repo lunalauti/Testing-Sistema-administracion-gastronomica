@@ -31,13 +31,35 @@ public class ControladorAdmin implements ActionListener {
 
 	private ControladorAdmin() {
 		if (Cerveceria.getInstance().getAdmin().editado == false) {
-			String pass = JOptionPane.showInputDialog(null, "Ingrese nueva contraseña para ADMIN");
-			while (pass == null || pass.isEmpty())
-				pass = JOptionPane.showInputDialog(null, "Contraseña invalida.Ingrese nueva contraseña para ADMIN");
-			Cerveceria.getInstance().getAdmin().setPassword(pass);
-			Cerveceria.getInstance().getAdmin().editado = true;
+			setNuevaContrasena();
 			Sistema.getInstance().persistir();
 		}
+	}
+	
+	private void setNuevaContrasena() {
+		String pass = JOptionPane.showInputDialog(null, "Ingrese nueva contraseña para ADMIN");
+		while (pass == null || pass.isEmpty()|| pass.length()<6|| pass.length()>12|| !verifica(pass))
+			pass = JOptionPane.showInputDialog(null, "Contraseña invalida.Ingrese nueva contraseña para ADMIN");
+		Cerveceria.getInstance().getAdmin().setPassword(pass);
+		Cerveceria.getInstance().getAdmin().editado = true;
+	}
+	
+	public boolean verifica(String password) {
+		
+		int i=0;
+		boolean mayus=false,num=false;
+		
+		while(i<password.length() && (!mayus || !num)){
+			
+	    	if(Character.isUpperCase(password.charAt(i)))
+	    		mayus=true;
+	    	
+	    	else if (Character.isDigit(password.charAt(i)))
+	        	num =true;
+		
+			i++;
+	    }
+		return (mayus&&num);
 	}
 
 	public static ControladorAdmin getInstance() {
@@ -198,8 +220,8 @@ public class ControladorAdmin implements ActionListener {
 			ControladorAdmin.getInstance().getVista().cerrarse();
 			ControladorAdmin.getInstance().setVista(new VAdmin());
 			Sistema.getInstance().actualizarListaAdmin();
-		} else if (comando.equalsIgnoreCase("CERRAR_JORNADA"))
-			Sistema.getInstance().cerrarJornada();
+		} else if (comando.equalsIgnoreCase("INFORME MOZOS"))
+			Sistema.getInstance().informeMozos();
 	}
 
 }

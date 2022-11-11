@@ -102,7 +102,7 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 	private JList<String> listNotificacion;
 	private DefaultListModel<String> modeloListaNoti = new DefaultListModel<String>();
 	private JPanel panel_19;
-	private JButton btnCerrarJornada;
+	private JButton btnInforme;
 
 	public VAdmin() {
 
@@ -157,9 +157,9 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 		this.btnPromocion.setActionCommand("PROMOCION");
 		this.panel_3.add(this.btnPromocion);
 
-		this.btnCerrarJornada = new JButton("CERRAR JORNADA");
-		this.btnCerrarJornada.setActionCommand("CERRAR_JORNADA");
-		this.panel_3.add(this.btnCerrarJornada);
+		this.btnInforme = new JButton("INFORME MOZOS");
+		this.btnInforme.setActionCommand("INFORME MOZOS");
+		this.panel_3.add(this.btnInforme);
 
 		this.btnSalir = new JButton("SALIR");
 		this.btnSalir.setActionCommand("SALIR_ADMIN");
@@ -417,7 +417,7 @@ public class VAdmin extends JFrame implements IVistaAdmin, MouseListener {
 		this.btnProducto.addActionListener(actionListener);
 		this.btnPromocion.addActionListener(actionListener);
 		this.btnSalir.addActionListener(actionListener);
-		this.btnCerrarJornada.addActionListener(actionListener);
+		this.btnInforme.addActionListener(actionListener);
 		this.actionListener = actionListener;
 	}
 

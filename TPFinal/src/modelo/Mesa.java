@@ -7,6 +7,7 @@ import java.io.Serializable;
  * <b>Invariante: </b><br>
  * - nroMesa>=0 - cantComensales>0. - estado !=null y estado = "LIBRE" o estado
  * = "OCUPADA".
+ * -cantComensales debe ser >= 2 cuando nroMesa es > 1
  */
 
 public class Mesa implements Serializable {
@@ -64,7 +65,7 @@ public class Mesa implements Serializable {
 		return estado;
 	}
 
-	public void cerrarse() { // es necesario?
+	public void cerrarse() { 
 		this.estado = "LIBRE";
 		this.invariante();
 	}
@@ -72,6 +73,10 @@ public class Mesa implements Serializable {
 	public void invariante() {
 		assert this.cantComensales > 0 : "la cantidad de comensales debe ser > 0";
 		assert this.nroMesa >= 0 : "El numero de mesa debe ser >=0";
+        if (nroMesa > 1)
+            assert cantComensales >= 2 : "La mesa no puede tener menos de 2 comensales si no es la barra";
+        else
+            assert cantComensales >= 0 : "La mesa no puede tener menos de 0 comensales";
 		assert this.estado != null && (estado.equalsIgnoreCase("libre") || this.estado.equalsIgnoreCase("ocupada"))
 				: "El estado de la mesa debe ser LIBRE o OCUPADA";
 	}

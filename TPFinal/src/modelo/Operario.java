@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import excepciones.ComandaAbiertaException;
 import excepciones.MesaInexistenteException;
 import excepciones.MesaNoDisponibleException;
+import excepciones.MesaSinComandaException;
 import excepciones.MozoInexistenteException;
 import excepciones.MozoNoDisponibleException;
 import excepciones.ProductosInvalidosException;
@@ -26,7 +27,7 @@ public class Operario implements Serializable {
 	/**
 	 * Crea una nueva instancia de un Operario. <br>
 	 * <b>Pre:</b> Todos los parametros deben ser distintos de null.<br>
-	 * Todos los par�metros debe ser distinto de vacio.<br>
+	 * Todos los parametros debe ser distinto de vacio.<br>
 	 * Ademas, password debe tener entre 6 y 12 caracteres con al menos 1 digito y 1
 	 * mayuscula<br>
 	 * <b>Post:</b> El nuevo operario esta instanciado y puede ingresar al sistema
@@ -136,8 +137,9 @@ public class Operario implements Serializable {
 	 * 
 	 * @param mesa:      mesa que se desea cerrar.
 	 * @param formaPago: cadena que indicara la forma de pago del cliente.
+	 * @throws MesaSinComandaException: se lanza si en la mesa que se quiere cerrar no hay una comanda abierta.
 	 */
-	public void cerrarMesa(Mesa mesa, String formaPago) {
+	public void cerrarMesa(Mesa mesa, String formaPago) throws MesaSinComandaException {
 
 		assert mesa != null : "la mesa debe ser distinto de null";
 		assert formaPago.equals("efectivo") || formaPago.equals("tarjeta") || formaPago.equals("mercPago")
@@ -160,7 +162,7 @@ public class Operario implements Serializable {
 	 *                 y fecha)
 	 */
 	public void tomarPedido(Mesa mesa, ArrayList<Pedido> pedidos)
-			throws MesaInexistenteException, ProductosInvalidosException {
+			throws MesaInexistenteException, MesaNoDisponibleException,ProductosInvalidosException {
 
 		assert pedidos != null && pedidos.size() > 0
 				: "pedidos debe ser distinto de null y debe haberse realizado el pedido de al menos 1 producto";

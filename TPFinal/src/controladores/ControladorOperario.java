@@ -61,16 +61,17 @@ public class ControladorOperario implements ActionListener {
 			Sistema.getInstance().cerrarMesa(mesa, formaPago);
 		} else if (comando.equalsIgnoreCase("PEDIDO")) {
 			Mesa mesa = this.vista.getSelectedMesa();
-			this.vista.cerrarse();
-			this.setVista(new VPedido(mesa));
-			this.vista.actualizaListaProducto(Cerveceria.getInstance().getProductos());
+			Sistema.getInstance().tomarPedido(mesa);
+			
+
 		} else if (comando.equalsIgnoreCase("ESTADISTICAS")) {
 			Mozo mozo = this.vista.getSelectedMozo();
 			Sistema.getInstance().getEstadisticas(mozo);
-		} else if (comando.equalsIgnoreCase("ENVIAR_PEDIDO")) {
+		}else if (comando.equalsIgnoreCase("ENVIAR_PEDIDO")) {
 			ArrayList<Pedido> pedidos = this.vista.getListaPedidos();
 			Mesa mesa = this.vista.getSelectedMesa();
-			Sistema.getInstance().tomarPedido(mesa, pedidos);
+			Sistema.getInstance().enviarPedido(mesa, pedidos);
+
 		} else if (comando.equalsIgnoreCase("AGREGAR_PEDIDO")) {
 			Producto producto = this.vista.getProducto();
 			double cant = this.vista.getCant();
