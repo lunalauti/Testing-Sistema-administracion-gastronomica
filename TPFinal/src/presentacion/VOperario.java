@@ -78,7 +78,8 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 	private JScrollPane scrollPane_4;
 	private JList<String> listNotificacion;
 	private DefaultListModel<String> modeloListaNoti = new DefaultListModel<String>();
-
+	private JButton btnLiberarMesas;
+	
 	public VOperario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 450);
@@ -204,6 +205,9 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 		this.btnCerrar.setActionCommand("CERRAR");
 		this.panel_5.add(this.btnCerrar);
 
+		this.btnLiberarMesas = new JButton("DESASIGNAR MESAS DESOCUPADAS");
+		this.btnLiberarMesas.setActionCommand("DESASIGNAR");
+		this.panel_4.add(this.btnLiberarMesas);
 
 
 		this.btnSalir = new JButton("SALIR");
@@ -272,6 +276,7 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 		this.btnFranco.addActionListener(actionListener);
 		this.btnPedido.addActionListener(actionListener);
 		this.btnAsignar.addActionListener(actionListener);
+		this.btnLiberarMesas.addActionListener(actionListener);
 		this.btnEstadisticas.addActionListener(actionListener);
 		this.btnCerrar.addActionListener(actionListener);
 		this.btnSalir.addActionListener(actionListener);

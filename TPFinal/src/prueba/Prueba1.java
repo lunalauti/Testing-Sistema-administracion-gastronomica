@@ -28,7 +28,6 @@ public class Prueba1 {
 			IPersistencia<Serializable> persistencia = new PersistenciaBIN();
 			Operario op1 = new Operario("Santi Sosa", "SANTISOSA", "Santi123");
 			cerveceria.addOperario(op1);
-			//System.out.println(cerveceria.getOperarios().get(0).getUsername());
 			Date fecha1 = new Date(2000, 8, 17);
 
 

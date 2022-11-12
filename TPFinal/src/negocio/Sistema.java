@@ -313,16 +313,11 @@ public class Sistema {
 			ControladorOperario.getInstance().getVista().actualizaListaMesas(cerveceria.getMesas());
 			ControladorOperario.getInstance().getVista().notificar("Mesa asignada correctamente");
 			cerveceria.persistir();
-		} catch (MozoInexistenteException e) {
-			ControladorOperario.getInstance().getVista().notificar("El mozo no existe");
-		} catch (MozoNoDisponibleException e) {
-			ControladorOperario.getInstance().getVista()
-					.notificar("No se pueden asignar mesas a un mozo que no este activo");
-		} catch (MesaNoDisponibleException e) {
-			ControladorOperario.getInstance().getVista().notificar("No se puede asignar una mesa ya asignada");
-		} catch (MesaInexistenteException e) {
-			ControladorOperario.getInstance().getVista().notificar("La mesa no existe");
+		} 
+		catch (Exception e) {
+			ControladorOperario.getInstance().getVista().notificar(e.getMessage());
 		}
+
 	}
 
 	public void cerrarMesa(Mesa mesa, String formaPago) {
@@ -387,16 +382,13 @@ public class Sistema {
 	public void informeMozos() {
 		String informe = cerveceria.getInformeMozos();
 		ControladorAdmin.getInstance().getVista().notificar(informe);
+
 	}
 
-	public void cerrarJornada() {
-		try {
-			cerveceria.cerrarJornada();
+	public void liberarMesasDesocupadas() {
+			cerveceria.liberarMesasDesocupadas();
+			ControladorOperario.getInstance().getVista().notificar("Se desasignaron los mozos de todas las mesas que estaban desocupadas");
 			ControladorOperario.getInstance().getVista().actualizaListaMesas(cerveceria.getMesas());
-			ControladorOperario.getInstance().getVista().actualizaListaMozos(cerveceria.getMozos());
-			ControladorOperario.getInstance().getVista().notificar("Jornada cerrada correctamente");
-		} catch (ComandaAbiertaException e) {
-			ControladorOperario.getInstance().getVista().notificar(e.getMessage());
-		}
 	}
+	
 }

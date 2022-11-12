@@ -120,12 +120,20 @@ public class Cerveceria {
 
 				if (i < mesas.size() && mesa.getNroMesa()==mesas.get(i).getNroMesa()) { // la mesa existe
 
-					if (mesa.getEstado().equalsIgnoreCase("LIBRE")) { // el mozo y la mesa estan disponibles
+					if (mesa.getEstado().equalsIgnoreCase("LIBRE") && !mesa.isAsignado()) { // el mozo y la mesa estan disponibles
 						mozo.addMesa(mesa);
 						mesa.setAsignado(true);
-						//mesa.setEstado("OCUPADA");
-					} else
-						throw new MesaNoDisponibleException("La mesa " + mesa.getNroMesa() + " no esta disponible");
+
+					} 
+					else { //la mesa no esta disponible
+						String msg;
+						if (mesa.isAsignado())
+							 msg = "ERROR: La mesa ya estaba asignada";
+						else
+							msg="La mesa " + mesa.getNroMesa() + " no esta disponible";
+						throw new MesaNoDisponibleException(msg);
+					}
+
 				} else
 					throw new MesaInexistenteException("La mesa seleccionada no existe");
 			} else
@@ -781,6 +789,15 @@ public class Cerveceria {
 			// cambia el estado?
 
 		}
+	}
+	
+	//libera (desasigna los mozos) de aquellas mesas que no estan ocupadas por clientes.
+	public void liberarMesasDesocupadas() {
+        for (Mesa mesaAct : mesas) {
+            if (mesaAct.isAsignado() && mesaAct.getEstado().equals("LIBRE")) {
+            	mesaAct.setAsignado(false);
+            }
+        }
 	}
 
 	private void invariante() {

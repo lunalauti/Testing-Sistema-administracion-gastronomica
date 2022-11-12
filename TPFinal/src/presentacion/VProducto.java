@@ -305,7 +305,9 @@ public class VProducto extends JFrame implements IVistaAdmin, KeyListener {
 
 	@Override
 	public int getCant() {
-		return (Integer) this.spinnerStock.getValue();
+		Double aux = (double) this.spinnerStock.getValue();
+		return aux.intValue();
+
 	}
 
 }

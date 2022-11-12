@@ -178,7 +178,7 @@ public class Mozo implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Nombre y Apellido= " + nya + ", Fecha de Nacimiento=" + fecha_nac + ", Cantidad de hijos=" + cantHijos
+		return "Nombre y Apellido= " + nya + ", edad "+this.getEdad()+" Cantidad de hijos= " + cantHijos
 				+ ", estado=" + estado;
 	}
 
