@@ -78,7 +78,6 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 	private JScrollPane scrollPane_4;
 	private JList<String> listNotificacion;
 	private DefaultListModel<String> modeloListaNoti = new DefaultListModel<String>();
-	private JButton btnCerrarJornada;
 
 	public VOperario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -205,9 +204,7 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 		this.btnCerrar.setActionCommand("CERRAR");
 		this.panel_5.add(this.btnCerrar);
 
-		this.btnCerrarJornada = new JButton("CERRAR JORNADA");
-		this.btnCerrarJornada.setActionCommand("CERRAR_JORNADA");
-		this.panel_4.add(this.btnCerrarJornada);
+
 
 		this.btnSalir = new JButton("SALIR");
 		this.panel_4.add(this.btnSalir);
@@ -277,7 +274,6 @@ public class VOperario extends JFrame implements IVistaOperario, MouseListener {
 		this.btnAsignar.addActionListener(actionListener);
 		this.btnEstadisticas.addActionListener(actionListener);
 		this.btnCerrar.addActionListener(actionListener);
-		this.btnCerrarJornada.addActionListener(actionListener);
 		this.btnSalir.addActionListener(actionListener);
 		this.actionListener = actionListener;
 	}

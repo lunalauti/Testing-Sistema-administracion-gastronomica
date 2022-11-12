@@ -28,7 +28,7 @@ public class Prueba1 {
 			IPersistencia<Serializable> persistencia = new PersistenciaBIN();
 			Operario op1 = new Operario("Santi Sosa", "SANTISOSA", "Santi123");
 			cerveceria.addOperario(op1);
-			System.out.println(cerveceria.getOperarios().get(0).getUsername());
+			//System.out.println(cerveceria.getOperarios().get(0).getUsername());
 			Date fecha1 = new Date(2000, 8, 17);
 
 
@@ -84,7 +84,6 @@ public class Prueba1 {
 			
 			// TOMO LAS COMANDAS
 			cerveceria.tomarComanda(mesa1, pedidoInicialmesa1);
-			System.out.println(cerveceria.getComanda(mesa1));
 
 			// AGREGO UN PEDIDO NUEVO A LA COMANDA DE LA MESA1
 			cerveceria.tomarComanda(mesa1, pedidoPosteriormesa1);
@@ -95,7 +94,6 @@ public class Prueba1 {
 			// EXISTENTE
 			Comanda PruebaComanda = cerveceria.getComandasAbiertas().get(0);
 			pedidoParcialMesa1 = PruebaComanda.getListaProductos();
-			System.out.println(pedidoParcialMesa1.get(2).getProducto().getNombre());
 
 			// PROMOCIONES
 			ArrayList<String> diasPromo = new ArrayList<String>();
@@ -120,7 +118,6 @@ public class Prueba1 {
 			// PRUEBA DE LAS PROMOS
 
 			cerveceria.cerrarMesa(mesa1, "TARJETA");
-			System.out.println(cerveceria.getVentas().get(0).getTotal());
 			persistencia.abrirOutput("Cerveceria.bin");
 			System.out.println("Crea archivo escritura");
 			CerveceriaDTO cDTO = UtilPersistencia.CerveceriaToCerveceriaDTO(cerveceria);

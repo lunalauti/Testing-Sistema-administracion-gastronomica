@@ -104,6 +104,8 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 
 		this.checkBoxActivo = new JCheckBox("ACTIVO");
 		this.checkBoxActivo.setHorizontalAlignment(SwingConstants.CENTER);
+		this.checkBoxActivo.setSelected(true);
+		this.checkBoxActivo.setEnabled(false);
 		this.panel.add(this.checkBoxActivo);
 
 		this.btnRegistrar = new JButton("REGISTRAR");
@@ -287,6 +289,7 @@ public class VRegistroOp extends JFrame implements KeyListener, IVistaAdmin {
 		this.textUser.setText(op.getUsername());
 		this.checkBoxActivo.setSelected(op.isActivo());
 		this.btnRegistrar.setEnabled(verifica());
+		this.checkBoxActivo.setEnabled(true);
 	}
 
 	@Override
