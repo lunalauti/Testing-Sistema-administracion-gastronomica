@@ -29,6 +29,7 @@ import modelo.Producto;
 import modelo.PromoProducto;
 import modelo.PromoTemporal;
 import modelo.Promocion;
+import javax.swing.SpinnerNumberModel;
 
 @SuppressWarnings("serial")
 public class VPromocion extends JFrame implements IVistaPromo, KeyListener, MouseListener {
@@ -286,6 +287,7 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 		this.panel_7.add(this.lblNewLabel_8);
 
 		this.spinnerCantMinima = new JSpinner();
+		this.spinnerCantMinima.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 		this.spinnerCantMinima.setEnabled(false);
 		this.spinnerCantMinima.addKeyListener(this);
 		this.panel_7.add(this.spinnerCantMinima);
@@ -301,6 +303,7 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 		this.textPrecio.setColumns(10);
 		this.setVisible(true);
 		this.cargaProductos(productos);
+
 	}
 
 	private boolean verifica() {
@@ -407,7 +410,7 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 
 	@Override
 	public int getPorcentaje() {
-		int porcentaje = 0;
+		int porcentaje = 1;
 		try {
 			porcentaje = Integer.valueOf(this.textPorcentaje.getText());
 		} catch (Exception e) {
@@ -430,11 +433,12 @@ public class VPromocion extends JFrame implements IVistaPromo, KeyListener, Mous
 	@Override
 	public int getCant() {
 		return (int) this.spinnerCantMinima.getValue();
+		
 	}
 
 	@Override
 	public double getPrecio() {
-		double precio = 0;
+		double precio = 1;
 		try {
 			precio = Double.valueOf(this.textPrecio.getText());
 		} catch (Exception e) {

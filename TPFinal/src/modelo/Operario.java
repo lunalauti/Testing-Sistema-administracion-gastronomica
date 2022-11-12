@@ -142,8 +142,8 @@ public class Operario implements Serializable {
 	public void cerrarMesa(Mesa mesa, String formaPago) throws MesaSinComandaException {
 
 		assert mesa != null : "la mesa debe ser distinto de null";
-		assert formaPago.equals("efectivo") || formaPago.equals("tarjeta") || formaPago.equals("mercPago")
-				|| formaPago.equals("ctaDNI") : "forma de pago incorrecta";
+		assert formaPago.equalsIgnoreCase("efectivo") || formaPago.equalsIgnoreCase("tarjeta") || formaPago.equalsIgnoreCase("mercPago")
+				|| formaPago.equalsIgnoreCase("ctaDNI") : "forma de pago incorrecta";
 
 		Cerveceria.getInstance().cerrarMesa(mesa, formaPago);
 	}

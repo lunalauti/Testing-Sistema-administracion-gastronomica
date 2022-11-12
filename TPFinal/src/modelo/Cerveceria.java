@@ -509,11 +509,18 @@ public class Cerveceria {
 	
 	public void addPromoTemp(PromoTemporal promo) throws PromoRepetidaException {
 		
-		int i=0;
-		while (i<this.promosTemporales.size() && !this.promosTemporales.get(i).getNombre().equalsIgnoreCase(promo.getNombre()))
-			i++;
+		PromoTemporal promoAct;
+		boolean enc=false;
+		Iterator<PromoTemporal> it= this.promosTemporales.iterator();
 		
-		if (i>0 && i>=this.promosTemporales.size()) //verifico i>0 para que no se lance la excepcion al agregar la primera promoTemporal
+		while(it.hasNext() && !enc) {
+			promoAct=it.next();
+			if(promoAct.getNombre().equalsIgnoreCase(promo.getNombre()))
+				enc=true;
+		}
+		
+		
+		if (enc) 
 			throw new PromoRepetidaException("Ya existe una promo temporal con el mismo nombre ("+promo.getNombre()+")");
 		else
 			this.promosTemporales.add(promo);

@@ -116,7 +116,6 @@ public class Sistema {
 
 	public void addOperario(String nya, String user, String pass) {
 
-
 		if (verifica(pass)) {
 			try {
 				cerveceria.getAdmin().addOperario(nya, user, pass);
@@ -132,23 +131,23 @@ public class Sistema {
 		} else
 			JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 1 digito y 1 mayuscula");
 	}
-	
+
 	public boolean verifica(String password) {
-		
-		int i=0;
-		boolean mayus=false,num=false;
-		
-		while(i<password.length() && (!mayus || !num)){
-			
-	    	if(Character.isUpperCase(password.charAt(i)))
-	    		mayus=true;
-	    	
-	    	else if (Character.isDigit(password.charAt(i)))
-	        	num =true;
-		
+
+		int i = 0;
+		boolean mayus = false, num = false;
+
+		while (i < password.length() && (!mayus || !num)) {
+
+			if (Character.isUpperCase(password.charAt(i)))
+				mayus = true;
+
+			else if (Character.isDigit(password.charAt(i)))
+				num = true;
+
 			i++;
-	    }
-		return (mayus&&num);
+		}
+		return (mayus && num);
 	}
 
 	public void addProducto(String nombre, double pCosto, double pVenta, int stock) {
@@ -187,9 +186,8 @@ public class Sistema {
 			ControladorAdmin.getInstance().getVista().notificar("Promocion registrada correctamente");
 			actualizarListaAdmin();
 			persistir();
-		}
-		catch(Exception e) {
-			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 
 	}
@@ -240,8 +238,7 @@ public class Sistema {
 			ControladorAdmin.getInstance().getVista().actualizaListaPromoTemp(cerveceria.getPromoTemporales());
 			ControladorAdmin.getInstance().getVista().notificar("Promocion eliminada correctamente");
 			persistir();
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
 		}
 
@@ -255,7 +252,7 @@ public class Sistema {
 			persistir();
 		}
 
-		catch(Exception e) {
+		catch (Exception e) {
 			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
 		}
 	}
@@ -266,8 +263,7 @@ public class Sistema {
 			ControladorAdmin.getInstance().getVista().actualizaListaMozos(cerveceria.getMozos());
 			ControladorAdmin.getInstance().getVista().notificar("Mozo eliminado correctamente");
 			persistir();
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			ControladorAdmin.getInstance().getVista().notificar(e.getMessage());
 		}
 
@@ -278,9 +274,8 @@ public class Sistema {
 			cerveceria.getAdmin().deleteOperario(op);
 			ControladorAdmin.getInstance().getVista().actualizaListaOperarios(cerveceria.getOperarios());
 			ControladorAdmin.getInstance().getVista().notificar("Operario eliminado correctamente");
-			persistir();	
-		}
-		catch(Exception e) {
+			persistir();
+		} catch (Exception e) {
 			ControladorAdmin.getInstance().getVista().notificar("Operario eliminado correctamente");
 		}
 
@@ -339,8 +334,7 @@ public class Sistema {
 			ControladorOperario.getInstance().getVista().actualizaListaVenta(cerveceria.getVentas());
 			ControladorOperario.getInstance().getVista().actualizaListaComanda(cerveceria.getComandasAbiertas());
 			persistir();
-		} 
-		catch(Exception e) {
+		} catch (Exception e) {
 			ControladorOperario.getInstance().getVista().notificar("La mesa no tiene una comanda abierta");
 		}
 	}
@@ -359,14 +353,15 @@ public class Sistema {
 	}
 
 	public void tomarPedido(Mesa mesa) {
-		if(mesa.isAsignado()) {
+		if (mesa.isAsignado()) {
 			ControladorOperario.getInstance().getVista().cerrarse();
 			ControladorOperario.getInstance().setVista(new VPedido(mesa));
-			ControladorOperario.getInstance().getVista().actualizaListaProducto(Cerveceria.getInstance().getProductos());
-	}else
-		ControladorOperario.getInstance().getVista().notificar("Mesa sin asignar");
+			ControladorOperario.getInstance().getVista()
+					.actualizaListaProducto(Cerveceria.getInstance().getProductos());
+		} else
+			ControladorOperario.getInstance().getVista().notificar("Mesa sin asignar");
 	}
-	
+
 	public void enviarPedido(Mesa mesa, ArrayList<Pedido> pedidos) {
 		try {
 			this.opLogueado.tomarPedido(mesa, pedidos);
@@ -389,12 +384,11 @@ public class Sistema {
 		cerveceria.persistir();
 	}
 
-	
 	public void informeMozos() {
 		String informe = cerveceria.getInformeMozos();
 		ControladorAdmin.getInstance().getVista().notificar(informe);
 	}
-	
+
 	public void cerrarJornada() {
 		try {
 			cerveceria.cerrarJornada();

@@ -129,7 +129,7 @@ public class Admin extends Operario {
 	public void addMesa(int cantComensales, int nroMesa) throws MesaRepetidaException {
 
 		assert cantComensales > 0 : "la cantidad de comensales debe ser > 0";
-		assert nroMesa > 0 : "el nroMesa debe ser >= 0";
+		assert nroMesa >= 0 : "el nroMesa debe ser >= 0";
 
 		Mesa mesa = new Mesa(cantComensales, nroMesa);
 		Cerveceria.getInstance().addMesa(mesa);
