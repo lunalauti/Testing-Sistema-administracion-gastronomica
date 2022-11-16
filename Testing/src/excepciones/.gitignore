@@ -1,0 +1,14 @@
+/ContrasenaIncorrectaException.class
+/EstadoInvalidoException.class
+/MesaAsignadaException.class
+/MesaInexistenteException.class
+/MesaNoDisponibleException.class
+/MozoInexistenteException.class
+/MozoNoDisponibleException.class
+/MozoRepetidoException.class
+/OperarioInexistenteException.class
+/OperarioRepetidoException.class
+/ProductoInexistenteException.class
+/ProductoRepetidoException.class
+/PromocionInexistenteException.class
+/PromocionRepetidaException.class

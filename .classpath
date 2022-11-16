@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Cerveceria_Luna_Sosa/src"/>
+	<classpathentry kind="src" path="Fase de Programacion/src"/>
+	<classpathentry kind="src" path="taller-de-programacion-1/Fase de Testing/src"/>
+	<classpathentry kind="src" path="Testing/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="Cerveceria_Luna_Sosa/bin"/>
+</classpath>
