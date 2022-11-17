@@ -4,3 +4,6 @@
 /GuiTestEnabledDisabled.class
 /GuiTestIngresos.class
 /TestPersistencia.class
+/TestAgregarProducto.class
+/TestAsignarMesaMozo.class
+/TestEliminacion.class
