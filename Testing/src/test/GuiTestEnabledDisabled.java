@@ -1,4 +1,4 @@
-package testGUIyPersistencia;
+package test;
 
 import java.awt.AWTException;
 import java.awt.Robot;
@@ -12,7 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import negocio.ControladorAdmin;
 import util.ControladorTestGUI;
 import util.TestGIUUtils;
 import vista.VProducto;

@@ -1,4 +1,4 @@
-package testGUIyPersistencia;
+package test;
 
 import java.awt.AWTException;
 import java.awt.Robot;
