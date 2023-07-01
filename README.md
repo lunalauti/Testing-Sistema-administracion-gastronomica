@@ -20,7 +20,9 @@ Técnicas de testing aplicadas
 - test de GIU (clase robot)
 - test de Excepciones
 ---
-# informe de testing generado: 
+## Informe de testing generado: 
+[Informe de Testing](https://github.com/lunalauti/Testing-Sistema-administracion-gastronomica/blob/main/Informe-%20TP%20Final%20-%20Taller%20de%20Programaci%C3%B3n%20I.pdf)
+---
 [Video explicativo](https://youtu.be/oxrWkaBpzio)
 ---
 ⭐️ From 
